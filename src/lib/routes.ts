@@ -1,15 +1,10 @@
-import { FormInput, HelpCircle, Home, LucideWorkflow, Settings, Signature, User } from "lucide-react"
+import { FormInput, HelpCircle, Home, Settings, Signature, User } from "lucide-react"
 
 export const headerItems = [
   {
     title: "Home",
     url: "/dashboard",
     icon: Home,
-  },
-  {
-    title: "Flows",
-    url: "/flows/",
-    icon: LucideWorkflow,
   },
   {
     title: "Forms",
@@ -24,7 +19,7 @@ export const headerItems = [
 ]
 export const footerItems = [
   {
-    title: "Configurações",
+    title: "Settings",
     url: "#",
     icon: Settings,
   },

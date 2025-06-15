@@ -86,7 +86,7 @@
       "updatedAt": "2025-05-25T14:00:00Z"
     }
   ],
-  "flows": [
+  "flowsModels": [
     {
       "id": "flow_01",
       "name": "Onboarding RH",
@@ -98,19 +98,79 @@
       "updatedAt": "2025-06-01T12:00:00Z",
       "nodes": [
         {
-          "id": "start-1",
-          "type": "start",
+          "id": "form-1",
+          "type": "form",
           "position": {
-            "x": 50,
+            "x": 200,
             "y": 50
           },
           "data": {
-            "label": "Início",
-            "description": "Início do fluxo",
+            "label": "Preencher Formulário",
+            "description": "Formulário de reembolso",
+            "formId": "form_01",
             "status": "completed",
+            "form": {
+              "id": "form_01",
+              "name": "Formulário de Abertura de Conta",
+              "organizationId": "org_01",
+              "fields": [
+                {
+                  "name": "nome",
+                  "label": "Nome completo",
+                  "type": "text",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "label": "Email",
+                  "type": "email",
+                  "required": true
+                },
+                {
+                  "name": "telefone",
+                  "label": "Telefone",
+                  "type": "text",
+                  "required": false
+                }
+              ],
+              "createdBy": "user_01",
+              "createdAt": "2025-05-25T14:00:00Z",
+              "updatedAt": "2025-05-25T14:00:00Z"
+            },
             "createdBy": "admin@empresa.com"
           }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1",
+          "source": "start_1",
+          "target": "form_1"
         },
+        {
+          "id": "e2",
+          "source": "form_1",
+          "target": "approval_1"
+        },
+        {
+          "id": "e3",
+          "source": "approval_1",
+          "target": "end_1"
+        }
+      ]
+    }
+  ],
+  "flowsInstances": [
+    {
+      "id": "flow_01",
+      "name": "Onboarding RH",
+      "description": "Entrada de novos colaboradores",
+      "organizationId": "org_01",
+      "isPublished": true,
+      "createdBy": "user_01",
+      "createdAt": "2025-06-01T12:00:00Z",
+      "updatedAt": "2025-06-01T12:00:00Z",
+      "nodes": [
         {
           "id": "form-1",
           "type": "form",
@@ -121,39 +181,40 @@
           "data": {
             "label": "Preencher Formulário",
             "description": "Formulário de reembolso",
-            "formId": "form-reembolso",
+            "formId": "form_01",
             "status": "completed",
-            "createdBy": "admin@empresa.com"
-          }
-        },
-        {
-          "id": "approval-1",
-          "type": "approval",
-          "position": {
-            "x": 400,
-            "y": 50
-          },
-          "data": {
-            "label": "Aprovação do Gestor",
-            "description": "Gestor financeiro",
-            "approvers": [
-              "gestor@empresa.com"
-            ],
-            "status": "pending",
-            "createdBy": "admin@empresa.com"
-          }
-        },
-        {
-          "id": "end-1",
-          "type": "end",
-          "position": {
-            "x": 600,
-            "y": 50
-          },
-          "data": {
-            "label": "Fim",
-            "status": "pending",
-            "createdBy": "admin@empresa.com"
+            "createdBy": "admin@empresa.com",
+            "form" :{
+              "id": "form_01",
+              "name": "Formulário de Abertura de Conta",
+              "organizationId": "org_01",
+              "fields": [
+                {
+                  "name": "nome",
+                  "label": "Nome completo",
+                  "type": "text",
+                  "required": true,
+                  "value" : "Lucas Cid"
+                },
+                {
+                  "name": "email",
+                  "label": "Email",
+                  "type": "email",
+                  "required": true,
+                  "value" : "LucasCid@email.com"
+                },
+                {
+                  "name": "telefone",
+                  "label": "Telefone",
+                  "type": "text",
+                  "required": false,
+                  "value" : "71992068237"
+                }
+              ],
+              "createdBy": "user_01",
+              "createdAt": "2025-05-25T14:00:00Z",
+              "updatedAt": "2025-05-25T14:00:00Z"
+            }
           }
         }
       ],
