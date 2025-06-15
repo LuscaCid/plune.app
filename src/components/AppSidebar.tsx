@@ -8,10 +8,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar"
-import { ChartBar } from "lucide-react";
+import { ChartBar, Workflow } from "lucide-react";
 import { TypographyH4 } from "./ui/Typography";
 import { UserDropdown } from "./UserDropdown";
 import { footerItems, headerItems } from "@/lib/routes";
+import { NavMain } from "./ui/NavMain";
 export function AppSidebar() {
 
   return (
@@ -37,6 +38,23 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
+            <NavMain items={[
+              {
+                title: "Flows",
+                url: "/",
+                icon: Workflow,
+                items: [
+                  {
+                    title: "Models",
+                    url: "/flows/models"
+                  },
+                  {
+                    title : "Instances",
+                    url : "/flows/instances"
+                  }
+                ]
+              }
+            ]} />
           </SidebarMenu>
         </SidebarGroupContent>
         <SidebarGroupContent>
