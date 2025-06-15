@@ -1,0 +1,303 @@
+{
+  "organizations": [
+    {
+      "id": "org_01",
+      "name": "Empresa Alpha",
+      "domain": "empresaalpha.com"
+    },
+    {
+      "id": "org_02",
+      "name": "Empresa Beta",
+      "domain": "empresabeta.com"
+    }
+  ],
+  "users": [
+    {
+      "id": "user_01",
+      "name": "Lucas Lima",
+      "email": "lucas@empresaalpha.com",
+      "status": "Ativo",
+      "lastAccess": "2025-06-14T08:12:00Z",
+      "organizationRoles": [
+        {
+          "organizationId": "org_01",
+          "role": "Administrador"
+        },
+        {
+          "organizationId": "org_02",
+          "role": "Aprovador"
+        }
+      ]
+    },
+    {
+      "id": "user_02",
+      "name": "Ana Beatriz",
+      "email": "ana@empresaalpha.com",
+      "status": "Ativo",
+      "lastAccess": "2025-06-13T18:00:00Z",
+      "organizationRoles": [
+        {
+          "organizationId": "org_01",
+          "role": "Aprovador"
+        }
+      ]
+    },
+    {
+      "id": "user_03",
+      "name": "Carlos Mendes",
+      "email": "carlos@empresabeta.com",
+      "status": "Ativo",
+      "lastAccess": "2025-06-13T09:00:00Z",
+      "organizationRoles": [
+        {
+          "organizationId": "org_02",
+          "role": "Administrador"
+        }
+      ]
+    }
+  ],
+  "forms": [
+    {
+      "id": "form_01",
+      "name": "Formulário de Abertura de Conta",
+      "organizationId": "org_01",
+      "fields": [
+        {
+          "name": "nome",
+          "label": "Nome completo",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "required": true
+        },
+        {
+          "name": "telefone",
+          "label": "Telefone",
+          "type": "text",
+          "required": false
+        }
+      ],
+      "createdBy": "user_01",
+      "createdAt": "2025-05-25T14:00:00Z",
+      "updatedAt": "2025-05-25T14:00:00Z"
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow_01",
+      "name": "Onboarding RH",
+      "description": "Entrada de novos colaboradores",
+      "organizationId": "org_01",
+      "isPublished": true,
+      "createdBy": "user_01",
+      "createdAt": "2025-06-01T12:00:00Z",
+      "updatedAt": "2025-06-01T12:00:00Z",
+      "nodes": [
+        {
+          "id": "start-1",
+          "type": "start",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "data": {
+            "label": "Início",
+            "description": "Início do fluxo",
+            "status": "completed",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "form-1",
+          "type": "form",
+          "position": {
+            "x": 200,
+            "y": 50
+          },
+          "data": {
+            "label": "Preencher Formulário",
+            "description": "Formulário de reembolso",
+            "formId": "form-reembolso",
+            "status": "completed",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "approval-1",
+          "type": "approval",
+          "position": {
+            "x": 400,
+            "y": 50
+          },
+          "data": {
+            "label": "Aprovação do Gestor",
+            "description": "Gestor financeiro",
+            "approvers": [
+              "gestor@empresa.com"
+            ],
+            "status": "pending",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "end-1",
+          "type": "end",
+          "position": {
+            "x": 600,
+            "y": 50
+          },
+          "data": {
+            "label": "Fim",
+            "status": "pending",
+            "createdBy": "admin@empresa.com"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1",
+          "source": "start_1",
+          "target": "form_1"
+        },
+        {
+          "id": "e2",
+          "source": "form_1",
+          "target": "approval_1"
+        },
+        {
+          "id": "e3",
+          "source": "approval_1",
+          "target": "end_1"
+        }
+      ]
+    },
+    {
+      "id": "flow_02",
+      "name": "Onboarding RH2",
+      "description": "Entrada de novos colaboradores 2",
+      "organizationId": "org_01",
+      "isPublished": true,
+      "createdBy": "user_01",
+      "createdAt": "2025-06-02T12:00:00Z",
+      "updatedAt": "2025-06-01T12:00:00Z",
+      "nodes": [
+        {
+          "id": "start-1",
+          "type": "start",
+          "position": {
+            "x": 50,
+            "y": 50
+          },
+          "data": {
+            "label": "Início",
+            "description": "Início do fluxo",
+            "status": "completed",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "form-1",
+          "type": "form",
+          "position": {
+            "x": 200,
+            "y": 50
+          },
+          "data": {
+            "label": "Preencher Formulário",
+            "description": "Formulário de reembolso",
+            "formId": "form-reembolso",
+            "status": "completed",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "approval-1",
+          "type": "approval",
+          "position": {
+            "x": 400,
+            "y": 50
+          },
+          "data": {
+            "label": "Aprovação do Gestor",
+            "description": "Gestor financeiro",
+            "approvers": [
+              "gestor@empresa.com"
+            ],
+            "status": "pending",
+            "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "end-1",
+          "type": "end",
+          "position": {
+            "x": 600,
+            "y": 50
+          },
+          "data": {
+            "label": "Fim",
+            "status": "pending",
+            "createdBy": "admin@empresa.com"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "id": "e1",
+          "source": "start_1",
+          "target": "form_1"
+        },
+        {
+          "id": "e2",
+          "source": "form_1",
+          "target": "approval_1"
+        },
+        {
+          "id": "e3",
+          "source": "approval_1",
+          "target": "end_1"
+        }
+      ]
+    }
+  ],
+  "approvals": [
+    {
+      "id": "approval_01",
+      "organizationId": "org_01",
+      "flowId": "flow_01",
+      "flowName": "Onboarding RH",
+      "stepId": "approval_1",
+      "approverId": "user_02",
+      "status": "Pendente",
+      "createdAt": "2025-06-13T15:30:00Z",
+      "deadline": "2025-06-15T23:59:59Z"
+    }
+  ],
+  "webhooks": [
+    {
+      "id": "webhook_01",
+      "organizationId": "org_01",
+      "name": "Slack Notifier",
+      "url": "https://hooks.slack.com/services/xxxx/yyyy",
+      "method": "POST",
+      "isActive": true,
+      "createdAt": "2025-06-01T10:00:00Z",
+      "updatedAt": "2025-06-01T10:00:00Z"
+    }
+  ],
+  "dashboardExecutions": [
+    {
+      "id": "exec_01",
+      "organizationId": "org_01",
+      "flowName": "Onboarding RH",
+      "status": "Aprovado",
+      "lastStep": "Aprovação do Gestor",
+      "createdAt": "2025-06-13T09:10:00Z",
+      "updatedAt": "2025-06-14T10:05:00Z"
+    }
+  ]
+}
