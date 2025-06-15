@@ -11,7 +11,7 @@ export function AppHeader() {
   const { open }= useSidebar()
   return (
     <header
-      className={`${!open ? "ml-2" : ""} backdrop-blur-lg z-20 fixed md:static rounded-lg p-2 pl-3 pr-4 mt-2  h-fit flex items-center bg-white/80 md:bg-zinc-50 dark:bg-zinc-900 dark:bg-[oklch(0.21 0.01 0)] justify-between border border-zinc-200 dark:border-zinc-800 `}
+      className={`${!open ? "ml-2" : ""} backdrop-blur-lg z-[100000]  fixed md:static rounded-lg p-2 pl-3 pr-4 mt-2  h-fit flex items-center bg-white/80   md:bg-zinc-50/80 dark:bg-zinc-900 dark:bg-[oklch(0.21 0.01 0)] justify-between border border-zinc-200 dark:border-zinc-800 `}
     >
       <aside className="flex items-center gap-1">
         <SidebarTrigger size={"lg"} />
