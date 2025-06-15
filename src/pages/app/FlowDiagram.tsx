@@ -2,14 +2,15 @@ import type { FlowInstance } from "@/@types/Flow";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReactFlow } from "@xyflow/react"
 import { useMemo, useState } from "react";
-import { useParams, replace } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export function FlowDiagram() {
+  const queryClient = useQueryClient();
   const params = useParams();
 
   const nodeTypes = useMemo(() => { }, []);
 
-  const queryClient = useQueryClient();
+
   const [flow, setFlow] = useState(() => {
     const orgFlows = queryClient.getQueryData(["get-organization-flows"]) as FlowInstance[] ?? [];
     if (params.id) {
