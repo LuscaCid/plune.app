@@ -1,3 +1,4 @@
+import type { Node } from "reactflow";
 import type { Form } from "./Form";
 
 export type FlowNodeStatus = "pending" | "completed" | "failed" | "skipped"
@@ -53,3 +54,5 @@ export interface Flow {
   createdAt: string;
   updatedAt: string;
 }
+ 
+export type FlowNode = Node<Flow> & { _id : string };
