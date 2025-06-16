@@ -131,6 +131,12 @@
                   "label": "Telefone",
                   "type": "text",
                   "required": false
+                },
+                {
+                  "name": "value",
+                  "label": "Valor",
+                  "type": "number",
+                  "required": false
                 }
               ],
               "createdBy": "user_01",
@@ -138,6 +144,23 @@
               "updatedAt": "2025-05-25T14:00:00Z"
             },
             "createdBy": "admin@empresa.com"
+          }
+        },
+        {
+          "id": "approval_1",
+          "type": "approval",
+          "position": {
+            "x": 600,
+            "y": -100
+          },
+          "data": {
+            "label": "Aprovação do Gestor",
+            "organizationId": "org_001",
+            "createdBy": "user_admin",
+            "status": "pending",
+            "approvers": [
+              "gestor_001"
+            ]
           }
         }
       ],
@@ -184,7 +207,7 @@
             "formId": "form_01",
             "status": "completed",
             "createdBy": "admin@empresa.com",
-            "form" :{
+            "form": {
               "id": "form_01",
               "name": "Formulário de Abertura de Conta",
               "organizationId": "org_01",
@@ -194,27 +217,92 @@
                   "label": "Nome completo",
                   "type": "text",
                   "required": true,
-                  "value" : "Lucas Cid"
+                  "value": "Lucas Cid"
                 },
                 {
                   "name": "email",
                   "label": "Email",
                   "type": "email",
                   "required": true,
-                  "value" : "LucasCid@email.com"
+                  "value": "LucasCid@email.com"
                 },
                 {
                   "name": "telefone",
                   "label": "Telefone",
                   "type": "text",
                   "required": false,
-                  "value" : "71992068237"
+                  "value": "71992068237"
+                },
+                {
+                  "name": "value",
+                  "label": "Valor",
+                  "type": "text",
+                  "required": false,
+                  "value": "1001"
                 }
               ],
               "createdBy": "user_01",
               "createdAt": "2025-05-25T14:00:00Z",
               "updatedAt": "2025-05-25T14:00:00Z"
             }
+          }
+        },
+        {
+          "id": "cond_1",
+          "type": "condition",
+          "position": {
+            "x": 400,
+            "y": 0
+          },
+          "data": {
+            "label": "Valor maior que R$1000?",
+            "organizationId": "org_001",
+            "status": "pending",
+            "createdBy": "system",
+            "rules": [
+              {
+                "fieldName": "valor_estimado",
+                "operator": "greater_than",
+                "value": 1000,
+                "targetNodeId": "approval_1"
+              },
+              {
+                "fieldName": "valor_estimado",
+                "operator": "less_than",
+                "value": 1000,
+                "targetNodeId": "form_2"
+              }
+            ]
+          }
+        },
+        {
+          "id": "approval_1",
+          "type": "approval",
+          "position": {
+            "x": 600,
+            "y": -100
+          },
+          "data": {
+            "label": "Aprovação do Gestor",
+            "organizationId": "org_001",
+            "createdBy": "user_admin",
+            "status": "pending",
+            "approvers": [
+              "gestor_001"
+            ]
+          }
+        },
+        {
+          "id": "webhook_1",
+          "type": "webhook",
+          "position": { "x": 1000, "y": 0
+          },
+          "data": {
+            "label": "Enviar para Financeiro",
+            "organizationId": "org_001",
+            "status": "pending",
+            "createdBy": "system",
+            "webhookUrl": "https://api.sistema-financeiro.com/reembolso"
           }
         }
       ],
