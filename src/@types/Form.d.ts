@@ -7,6 +7,7 @@ export interface FormField {
   required: boolean;
   value: string;
   options : string[] //em caso de select // checkbox
+  order? : number;
 }
 
 export interface Form {

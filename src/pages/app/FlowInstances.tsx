@@ -1,5 +1,5 @@
 import type { Flow } from "@/@types/Flow";
-import { GenericSelectableTable } from "@/components/custom/GenericSelectableTable";
+import { GenericTable } from "@/components/custom/GenericTable";
 import { ScreenWrapper } from "@/components/ScreenWrapper";
 import { useFlow } from "@/hooks/use-flow";
 import { useSeo } from "@/hooks/use-seo";
@@ -27,7 +27,7 @@ export function FlowInstances() {
   return (
     <ScreenWrapper>
       {!isLoading && data && (
-        <GenericSelectableTable<Flow>
+        <GenericTable<Flow>
           searchFilterColumnInput={{ accssorKey : "name", placelholder : "Flow name..."}}
           data={data}
           manualPagination={true}
