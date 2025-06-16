@@ -42,7 +42,7 @@ export type Payment = {
 }
 
 export interface SearchFilterColumnInputProps {
-  accssorKey : string;
+  accssorKey: string;
   placelholder: string;
 }
 interface Props<T extends RowData> {
@@ -51,44 +51,48 @@ interface Props<T extends RowData> {
   pageCount?: number;
   manualPagination?: boolean;
   searchFilterColumnInput?: SearchFilterColumnInputProps;
+  selectable?: boolean
 }
 
-export function GenericSelectableTable<T extends RowData>({
+export function GenericTable<T extends RowData>({
   columns,
   data,
   manualPagination,
   pageCount,
-  searchFilterColumnInput
+  searchFilterColumnInput,
+  selectable = true
 }: Props<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
-  const tableColumns: ColumnDef<T>[] = React.useMemo(() => [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    ...columns
-  ], [columns]);
+  const tableColumns: ColumnDef<T>[] = React.useMemo(() => {
+    if (selectable) {
+      return [ {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      }, ...columns, ];
+    }
+    return columns
+  }, [columns]);
 
   const table = useReactTable({
     data,
