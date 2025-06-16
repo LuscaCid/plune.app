@@ -7,8 +7,22 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import 'reactflow/dist/style.css';
+import { ConditionNodeType } from "@/components/ReactFlow/ConditionNodeType";
+import { ApprovalNodeType } from "@/components/ReactFlow/ApprovalNodeType";
+import { WebhookNodeType } from "@/components/ReactFlow/WebhookNodeType";
+import { useDragField } from "@/store/use-drag-field";
 
 export function FlowDiagram() {
+  const nodeTypes = useMemo(() => ({
+    form: FormNodeType,
+    end: StageNodeType,
+    start: StageNodeType,
+    approval: ApprovalNodeType,
+    condition: ConditionNodeType,
+    webhook: WebhookNodeType
+  }), []);
+  const isDraggingAnyField = useDragField((state) => state.isDraggingAnyField);
+
   const queryClient = useQueryClient();
   const params = useParams();
   const queryKeyBytype = useMemo(() => {
@@ -27,14 +41,6 @@ export function FlowDiagram() {
   const EDGE_TYPES = useMemo(() => ({
     "floating": FloatingEdge
   }), []);
-  const nodeTypes = useMemo(() => ({
-    form: FormNodeType,
-    end: StageNodeType,
-    start: StageNodeType,
-    approval: FormNodeType,
-    condition: FormNodeType,
-    webhook: FormNodeType
-  }), []);
 
   useEffect(() => {
     const orgFlows = queryClient.getQueryData(queryKeyBytype ?? []) as Flow[] ?? [];
@@ -44,15 +50,15 @@ export function FlowDiagram() {
       if (flowFound) setNodes(flowFound.nodes);
       else {
         queryClient.refetchQueries({ queryKey: queryKeyBytype })
-        .then(() => {
-          const orgFlowsRefetched = queryClient.getQueryData(queryKeyBytype ?? []) as Flow[] ?? [];
+          .then(() => {
+            const orgFlowsRefetched = queryClient.getQueryData(queryKeyBytype ?? []) as Flow[] ?? [];
 
-          const flowFoundByRefetch = orgFlowsRefetched.find((instance) => instance.id === params.id);
-          console.log(flowFoundByRefetch);
-          if (flowFoundByRefetch) setNodes(flowFoundByRefetch.nodes);
-          
-        })
-        .catch(err => console.log(err))
+            const flowFoundByRefetch = orgFlowsRefetched.find((instance) => instance.id === params.id);
+            console.log(flowFoundByRefetch);
+            if (flowFoundByRefetch) setNodes(flowFoundByRefetch.nodes);
+
+          })
+          .catch(err => console.log(err))
       }
     }
   }, [params, queryClient, setNodes, queryKeyBytype]);
@@ -74,6 +80,7 @@ export function FlowDiagram() {
         onEdgesChange={onEdgesChange}
         onNodesChange={onNodesChange}
         fitView
+        panOnDrag={!isDraggingAnyField}
         edgeTypes={EDGE_TYPES}
         nodeTypes={nodeTypes}
       >
