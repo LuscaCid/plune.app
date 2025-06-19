@@ -6,36 +6,56 @@ import { Input } from "../ui/input";
 import { FormProvider, useForm } from "react-hook-form";
 import type { FlownNodeData } from "@/@types/Flow";
 import { Button } from "../ui/button";
-import { DefaultNodeComponents } from "./DefaultNodeComponents";
 import { FlowCard } from "../ui/FlowCard";
-import { Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
+import { DefaultNodeComponents } from "./DefaultNodeComponents";
+import { useLocation } from "react-router-dom";
+import { useUserStore } from "@/store/user";
+import { useRoles } from "@/hooks/use-roles";
+import { CustomDropdownMenuItem } from "../UserDropdown";
+import { DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from "../ui/dropdown-menu";
 
 export const FormNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>) => {
   const methods = useForm();
-
+  const path = useLocation();
+  const { canEdit } = useRoles();
+  const selectedOrganization = useUserStore(state => state.selectedOrganization);
+  const isModelsPage = path.pathname.includes("models");
   const handleSubmit = useCallback((data: unknown) => {
     console.log(data);
   }, [])
   return (
     <FlowCard
+    
+      dropdownContent={
+        isModelsPage && canEdit(selectedOrganization!) && (
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Edition</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <CustomDropdownMenuItem  title="Edit Form" icon={Pencil} onClick={() => console.log("Edit Form")}/> 
+            <CustomDropdownMenuItem  title="Remove Form" icon={Pencil} onClick={() => console.log("Remove Form")}/> 
+          </DropdownMenuContent>
+        )
+      }
       status={nodeProps.data.status ?? "pending"}
-      title={nodeProps.data.form ? nodeProps.data.form.name : "Formulário"}
+      title={nodeProps.data.form ? nodeProps.data.form.name : "ForPmulário"}
     >
       {nodeProps.data.form && (
         <FormProvider {...methods}>
           <form className="flex flex-col gap-4" onSubmit={methods.handleSubmit(handleSubmit)}>
 
-            { nodeProps.data.form.fields.map((formField) => (
+            {nodeProps.data.form.fields.map((formField) => (
               <FormField
                 key={formField.name}
                 control={methods.control}
                 name={formField.name}
                 render={({ field }) => (
-                  < FormItem className="p-2 rounded-lg border border-dashed">
+                  < FormItem className="p-2 rounded-lg">
 
                     <FormLabel>{formField.label}</FormLabel>
                     <FormControl>
                       <Input
+                        disabled
                         required={formField.required}
                         placeholder={formField.label}
                         {...field}

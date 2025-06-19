@@ -9,11 +9,13 @@ export function DefaultNodeComponents({ nodeProps }: Props) {
         id="right"
         type="source"
         position={Position.Right}
+        isConnectable
         className={`${!nodeProps.selected && "opacity-90"} p-1 bg-zinc-200 dark:bg-zinc-200 -mr-5`}
-      />
+        />
       <Handle
         className={`${!nodeProps.selected && "opacity-90"} p-1 bg-zinc-200 dark:bg-zinc-200 -ml-5`}
         id="left"
+        isConnectable
         type="source"
         position={Position.Left}
       /></>
