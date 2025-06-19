@@ -1,3 +1,4 @@
+import type { Flow } from "@/@types/Flow";
 import { api } from "@/service/api"
 import { useCallback } from "react"
 
@@ -10,15 +11,13 @@ export function useFlow() {
     const data = response.data;
     console.log(data);
 
-    return response.data;
+    return response.data as Flow[];
   }, []);
   const getOrganizationModelFlows = useCallback(async () => {
 
     const response = await api.get("flowsModels");
-    const data = response.data;
-    console.log(data);
 
-    return response.data;
+    return response.data as Flow[];
   }, []);
 
   return {
