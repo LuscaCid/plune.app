@@ -1,16 +1,16 @@
 import { EllipsisVertical, LogOut, type LucideIcon, SunMoon, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { SidebarMenuButton, useSidebar } from "./ui/sidebar";
+import { SidebarMenuButton } from "./ui/sidebar";
 import { type MouseEvent } from "react";
 import { TypographyMuted, TypographySmall } from "./ui/Typography";
 import { useThemeStore } from "@/store/theme";
 import { useUser } from "@/hooks/use-user";
 import { useUserStore } from "@/store/user";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function UserDropdown() {
   const { setTheme, theme } = useThemeStore();
-  const { isMobile } = useSidebar();
   const { logout } = useUser();
   const user = useUserStore(state => state.user)
 
@@ -25,23 +25,19 @@ export function UserDropdown() {
             </Avatar>
             <div className="flex flex-col gap-1 items-start">
               <TypographySmall content={user ? user!.name : ""} />
-              <TypographyMuted className="max-w-[120px] overflow-hidden overflow-ellipsis" content={user ? user.entity! : ""} />
+              <TypographyMuted className="max-w-[130px] overflow-hidden overflow-ellipsis" content={user ? user.email! : ""} />
             </div>
           </aside>
           <EllipsisVertical size={20} />
         </SidebarMenuButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        side={isMobile ? "bottom" : "right"}
-        className="bg-zinc-50 border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 rounded-lg"
-      >
+      <CustomDropwdownMenuContent>
         <DropdownMenuLabel>Conta</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <CustomDropdownMenuItem icon={SunMoon} onClick={() => setTheme(theme == "dark" ? "light" : "dark")} title="Tema" />
         <CustomDropdownMenuItem icon={User} onClick={() => console.log("Perfil")} title={user ? user.email! : ""} />
         <CustomDropdownMenuItem icon={LogOut} onClick={logout} title="Sair" />
-      </DropdownMenuContent>
+      </CustomDropwdownMenuContent>
     </DropdownMenu>
   );
 }
@@ -50,7 +46,7 @@ interface Props {
   icon: LucideIcon;
   onClick: (e: MouseEvent) => void;
 }
-function CustomDropdownMenuItem({ icon: Icon, onClick, title }: Props) {
+export function CustomDropdownMenuItem({ icon: Icon, onClick, title }: Props) {
   return (
     <DropdownMenuItem
       onClick={onClick}
@@ -61,5 +57,18 @@ function CustomDropdownMenuItem({ icon: Icon, onClick, title }: Props) {
         content={title}
       />
     </DropdownMenuItem>
+  )
+}
+
+export function CustomDropwdownMenuContent({ children }: { children?: React.ReactNode }) {
+  const isMobile = useIsMobile();
+  return (
+    <DropdownMenuContent
+      align="end"
+      side={isMobile ? "bottom" : "right"}
+      className="bg-zinc-50 border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 rounded-lg"
+    >
+      {children}
+    </DropdownMenuContent>
   )
 }

@@ -17,16 +17,16 @@ import { Link } from "react-router-dom";
 export function AppSidebar() {
 
   return (
-    <Sidebar variant="floating" className="p-2 border-zinc-200 dark:border-zinc-800/90 " >
+    <Sidebar collapsible="icon" variant="floating" className="p-2 border-zinc-200 dark:border-zinc-800/90 " >
       <SidebarHeader className="border-b border-b-zinc-300 dark:border-b-zinc-800">
-        <SidebarMenuButton>
-          <Link to={"/"}>
-            <div className="px-2 py-1 cursor-pointer flex flex-row items-center gap-1 w-full rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 transition duration-150 p-0">
-              <ChartBar size={20} />
+        <Link to={"/"}>
+          <SidebarMenuItem className="flex ">
+            <SidebarMenuButton>
+              <ChartBar size={15} />
               <TypographyH4 content="Plune.app" />
-            </div>
-          </Link>
-        </SidebarMenuButton>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </Link>
 
       </SidebarHeader>
       <SidebarContent className="p-2 flex flex-col justify-between dark:bg-zinc-900" >

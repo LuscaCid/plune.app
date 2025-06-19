@@ -1,4 +1,4 @@
-import { FormInput, HelpCircle, Home, Settings, Signature, User } from "lucide-react"
+import { Building2, FormInput, HelpCircle, Home, Settings, Signature, User } from "lucide-react"
 
 export const headerItems = [
   {
@@ -15,6 +15,11 @@ export const headerItems = [
     title: "Approvals",
     url: "/approvals",
     icon: Signature,
+  },
+  {
+    title: "Organizations",
+    url: "/organizations",
+    icon: Building2,
   },
 ]
 export const footerItems = [

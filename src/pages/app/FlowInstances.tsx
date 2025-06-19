@@ -4,8 +4,8 @@ import { ScreenWrapper } from "@/components/ScreenWrapper";
 import { useFlow } from "@/hooks/use-flow";
 import { useSeo } from "@/hooks/use-seo";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
 import { useFlowColumns } from "@/hooks/use-flow-columns";
+import { useSharedQueryKeys } from "@/hooks/use-shared-querykeys";
 
 export function FlowInstances() {
   useSeo({
@@ -13,14 +13,13 @@ export function FlowInstances() {
     description: "Visualizar flows executados pelos colaboradores",
     ogDescription: "Aqui você pode visualizar, criar fluxos de trabalho e monitorá-los"
   })
-  const flowQueryKey = useMemo(() => ["get-org-instance-flows"], []);
-  
-  const { getOrganizationInstancesFlows } = useFlow();
+  const { flowInstanceQueryKey } = useSharedQueryKeys();  
   const { instanceColumns } = useFlowColumns("/flows/diagram/instances/");
+  const { getOrganizationInstancesFlows } = useFlow();
 
   const { data, isLoading } = useQuery({
     queryFn: async () => getOrganizationInstancesFlows(),
-    queryKey: flowQueryKey,
+    queryKey: flowInstanceQueryKey,
     refetchOnWindowFocus: false,
   });
 

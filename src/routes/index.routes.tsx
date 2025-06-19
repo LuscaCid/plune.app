@@ -17,7 +17,7 @@ export function Router() {
   return (
     <BrowserRouter>
       <Toaster />
-      {!user ? <AppRoutes /> : <AuthRoutes />}
+      {user ? <AppRoutes /> : <AuthRoutes />}
     </BrowserRouter>
   )
 }
