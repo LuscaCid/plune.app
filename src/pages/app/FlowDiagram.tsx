@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { FormInput } from "lucide-react";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
-
 export function FlowDiagram() {
   const nodeTypes = useMemo(() => ({
     form: FormNodeType,
@@ -27,7 +26,6 @@ export function FlowDiagram() {
     "floating": FloatingEdge
   }), []);
   const isDraggingAnyField = useDragField((state) => state.isDraggingAnyField);
-
 
   const queryClient = useQueryClient();
   const params = useParams();

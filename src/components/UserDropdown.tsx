@@ -1,24 +1,22 @@
 import { EllipsisVertical, LogOut, type LucideIcon, SunMoon, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { SidebarMenuButton } from "./ui/sidebar";
 import { type MouseEvent } from "react";
 import { TypographyMuted, TypographySmall } from "./ui/Typography";
 import { useThemeStore } from "@/store/theme";
 import { useUser } from "@/hooks/use-user";
 import { useUserStore } from "@/store/user";
-import { useIsMobile } from "@/hooks/use-mobile";
-
-export function UserDropdown() {
-  const { setTheme, theme } = useThemeStore();
-  const { logout } = useUser();
+import * as Dropdown from "@radix-ui/react-dropdown-menu";
+import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "./ui/dropdown-menu";
+export function NativeUserDropdown() {
   const user = useUserStore(state => state.user)
-
+  const { setTheme, theme } = useThemeStore()
+  const { logout } = useUser();
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
-        <SidebarMenuButton size={"lg"} className="bg-zinc-100 dark:bg-transparent data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground p-2 rounded-lg hover:bg-zinc-200  dark:hover:bg-zinc-700/80 flex justify-between items-center w-full">
-          <aside className="flex gap-1.5 items-start" >
+    <Dropdown.Root>
+      <Dropdown.Trigger>
+        <SidebarMenuButton size={"lg"} className="no-drag bg-zinc-100 dark:bg-transparent  p-2 rounded-lg hover:bg-zinc-200  dark:hover:bg-zinc-700/80 flex justify-between items-center w-full">
+          <aside className="flex gap-1.5 items-center" >
             <Avatar>
               <AvatarImage className="rounded-full h-10 w-10" src={user ? user?.avatar : ""} />
               <AvatarFallback>{user ? user?.name.charAt(0) : ""} </AvatarFallback>
@@ -30,15 +28,21 @@ export function UserDropdown() {
           </aside>
           <EllipsisVertical size={20} />
         </SidebarMenuButton>
-      </DropdownMenuTrigger>
-      <CustomDropwdownMenuContent>
-        <DropdownMenuLabel>Conta</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <CustomDropdownMenuItem icon={SunMoon} onClick={() => setTheme(theme == "dark" ? "light" : "dark")} title="Tema" />
-        <CustomDropdownMenuItem icon={User} onClick={() => console.log("Perfil")} title={user ? user.email! : ""} />
-        <CustomDropdownMenuItem icon={LogOut} onClick={logout} title="Sair" />
-      </CustomDropwdownMenuContent>
-    </DropdownMenu>
+      </Dropdown.Trigger>
+      <Dropdown.Portal>
+        <Dropdown.Content align="end" className=" text-popover-foreground  bg-zinc-800 rounded-lg border border-zinc-700 p-1 z-50">
+          <Dropdown.Group className="flex flex-col ">
+            <DropdownMenuLabel >
+              Account
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <CustomDropdownMenuItem icon={SunMoon} onClick={() => setTheme(theme == "dark" ? "light" : "dark")} title="Theme" />
+            <CustomDropdownMenuItem icon={User} onClick={() => console.log("Perfil")} title={user ? user.email! : ""} />
+            <CustomDropdownMenuItem icon={LogOut} onClick={logout} title="Logout" />
+          </Dropdown.Group>
+        </Dropdown.Content>
+      </Dropdown.Portal>
+    </Dropdown.Root>
   );
 }
 interface Props {
@@ -61,12 +65,11 @@ export function CustomDropdownMenuItem({ icon: Icon, onClick, title }: Props) {
 }
 
 export function CustomDropwdownMenuContent({ children }: { children?: React.ReactNode }) {
-  const isMobile = useIsMobile();
   return (
     <DropdownMenuContent
       align="end"
-      side={isMobile ? "bottom" : "right"}
-      className="bg-zinc-50 border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 rounded-lg"
+      side={"right"}
+      className=" bg-zinc-50 border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 rounded-lg"
     >
       {children}
     </DropdownMenuContent>

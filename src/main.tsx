@@ -1,14 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { Router } from './routes/index.routes'
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Router } from './routes/index.routes';
+import "./globals.css";
 import 'reactflow/dist/style.css';
-import "./globals.css"
+
 const queryClient = new QueryClient();
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Router />
     </QueryClientProvider>
-  </StrictMode>,
+  </React.StrictMode>,
 )
+
+// Use contextBridge
+window.ipcRenderer.on('main-process-message', (_event, message) => {
+  console.log(message)
+})

@@ -1,13 +1,14 @@
 import axios from "axios";
-const isDev = import.meta.env["VITE_DEV"];
+// const isDev = import.meta.env["VITE_DEV"];
 
 const routes = { 
   dev : "http://localhost:3001",
   prod : "https://plune.api.com/api"
 }
+// const route = isDev == "true" ? routes.dev : routes.prod;
 
 export const api = axios.create({
-  baseURL : isDev == "true" ? routes.dev : routes.prod
+  baseURL : routes.dev
 })
 
 api.interceptors.request.use((config) => {

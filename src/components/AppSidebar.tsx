@@ -10,20 +10,20 @@ import {
 } from "./ui/sidebar"
 import { ChartBar, Workflow } from "lucide-react";
 import { TypographyH4 } from "./ui/Typography";
-import { UserDropdown } from "./UserDropdown";
 import { footerItems, headerItems } from "@/lib/routes";
 import { NavMain } from "./ui/NavMain";
 import { Link } from "react-router-dom";
+import { NativeUserDropdown } from "./UserDropdown";
 export function AppSidebar() {
 
   return (
-    <Sidebar collapsible="icon" variant="floating" className="p-2 border-zinc-200 dark:border-zinc-800/90 " >
-      <SidebarHeader className="border-b border-b-zinc-300 dark:border-b-zinc-800">
+    <Sidebar collapsible="icon" variant="inset" className=" border-zinc-200  border-r dark:border-zinc-800" >
+      <SidebarHeader className=" title-bar-drag-region">
         <Link to={"/"}>
-          <SidebarMenuItem className="flex ">
+          <SidebarMenuItem className="flex no-drag ">
             <SidebarMenuButton>
               <ChartBar size={15} />
-              <TypographyH4 content="Plune.app" />
+              <TypographyH4 content="Plune.app" className="select-none" />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </Link>
@@ -33,8 +33,8 @@ export function AppSidebar() {
         <SidebarGroupContent>
           <SidebarMenu>
             {headerItems.map((item) => (
-              <SidebarMenuItem key={item.url + item.title}>
-                <SidebarMenuButton className="flex gap-2 items-center" asChild>
+              <SidebarMenuItem key={item.url + item.title} className=" no-drag">
+                <SidebarMenuButton tooltip={item.title} className="flex gap-2 items-center" asChild>
                   <Link to={item.url}>
                     <item.icon size={20} />
                     {item.title}
@@ -77,7 +77,7 @@ export function AppSidebar() {
         </SidebarGroupContent>
       </SidebarContent>
       <SidebarFooter>
-        <UserDropdown />
+        <NativeUserDropdown />
       </SidebarFooter>
     </Sidebar>
   )
