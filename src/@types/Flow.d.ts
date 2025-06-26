@@ -3,7 +3,7 @@ import type { Form } from "./Form";
 
 export type FlowNodeStatus = "pending" | "completed" | "failed" | "skipped"
 
-export type FlowNodeType = "start" | "form" | "approval" | "webhook" | "end" | "condition";
+export type FlowNodeType = "stage" | "form" | "approval" | "webhook" | "condition";
 
 type ConditionOperator = "equals" | "not_equals" | "contains" | "greater_than" | "less_than";
 
@@ -13,7 +13,7 @@ interface ConditionRule {
   value: string | number | boolean;
   targetNodeId: string;
 }
-export interface FlownNodeData {
+export interface FlowNodeData {
   label: string;
   description?: string;
   organizationId: string

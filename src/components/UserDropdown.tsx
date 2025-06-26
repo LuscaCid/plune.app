@@ -30,7 +30,7 @@ export function NativeUserDropdown() {
         </SidebarMenuButton>
       </Dropdown.Trigger>
       <Dropdown.Portal>
-        <Dropdown.Content align="end" className=" text-popover-foreground  bg-zinc-800 rounded-lg border border-zinc-700 p-1 z-50">
+        <Dropdown.Content align="end" className=" text-popover-foreground bg-zinc-50  dark:bg-zinc-800 rounded-lg border  dark:border-zinc-700 p-1 z-50">
           <Dropdown.Group className="flex flex-col ">
             <DropdownMenuLabel >
               Account

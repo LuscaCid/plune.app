@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -25,7 +25,7 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    frame : false,
+    frame: false,
     minWidth: 900,
     minHeight: 700,
     height: 700,
@@ -35,7 +35,19 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
-
+  ipcMain.on('minimize', () => {
+    win?.minimize()
+  })
+  ipcMain.on('resize', () => {
+    if (win?.isMaximized()) {
+      win.unmaximize();
+      return;
+    }
+    win?.maximize()
+  });
+  ipcMain.on('close', () => {
+    win?.close()
+  })
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())

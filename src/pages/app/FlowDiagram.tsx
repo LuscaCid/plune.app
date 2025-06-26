@@ -1,5 +1,5 @@
-import ReactFlow, { useNodesState, useEdgesState, Controls, Background, MiniMap, BackgroundVariant, type Connection, ConnectionMode, MarkerType, Panel } from "reactflow"
-import type { Flow } from "@/@types/Flow";
+import ReactFlow, { useNodesState, useEdgesState, Controls, Background, MiniMap, BackgroundVariant, type Connection, ConnectionMode, MarkerType, Panel, NodeProps } from "reactflow"
+import type { Flow, FlowNodeType } from "@/@types/Flow";
 import { FloatingEdge } from "@/components/ReactFlow/FloatingEdge";
 import { FormNodeType } from "@/components/ReactFlow/FormNodeType";
 import { StageNodeType } from "@/components/ReactFlow/StageNodeType";
@@ -11,21 +11,28 @@ import { ApprovalNodeType } from "@/components/ReactFlow/ApprovalNodeType";
 import { WebhookNodeType } from "@/components/ReactFlow/WebhookNodeType";
 import { useDragField } from "@/store/use-drag-field";
 import { Button } from "@/components/ui/button";
-import { FormInput } from "lucide-react";
+import { FormInput, User, Webhook, Workflow } from "lucide-react";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { useDroppable } from "@/hooks/use-droppable";
+
+export type AppNodeTypes = Record<FlowNodeType, React.MemoExoticComponent<(nodeProps: NodeProps<any>) => JSX.Element>>
 
 export function FlowDiagram() {
-  const nodeTypes = useMemo(() => ({
+  const nodeTypes: AppNodeTypes = useMemo(() => ({
     form: FormNodeType,
     stage: StageNodeType,
     approval: ApprovalNodeType,
     condition: ConditionNodeType,
-    webhook: WebhookNodeType
+    webhook: WebhookNodeType,
+
   }), []);
   const EDGE_TYPES = useMemo(() => ({
     "floating": FloatingEdge
   }), []);
   const isDraggingAnyField = useDragField((state) => state.isDraggingAnyField);
+  const {
+    onDragStartNewNode
+  } = useDroppable();
 
   const queryClient = useQueryClient();
   const params = useParams();
@@ -79,6 +86,22 @@ export function FlowDiagram() {
     //salvar isso em cache
   }, [setEdges, edges]);
 
+  const onNodeDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    //obtencao do evento de transferencia de dados do proprio reactflow
+    const type = event.dataTransfer.getData('application/reactflow') as keyof typeof nodeTypes;
+    if (typeof type === 'undefined' || !type) {
+      return;
+    }
+    switch (type) {
+      case "form":
+        // return createNoteDispatch(event);  
+        break;
+      case "approval":
+        break;
+      // return createNodeDispatch(event);
+    }
+  }, []);
   return (
     <div className="w-full h-full">
       <ReactFlow
@@ -90,6 +113,7 @@ export function FlowDiagram() {
         proOptions={{ hideAttribution: true }}
         nodes={nodes}
         edges={edges}
+        onDrop={onNodeDrop}
         defaultEdgeOptions={{
           type: "floating",
           animated: true,
@@ -102,21 +126,44 @@ export function FlowDiagram() {
         fitView
         panOnDrag={!isDraggingAnyField}
       >
-        <Panel position="top-right" className="border border-zinc-200 dark:border-zinc-800 bg-zinc-950 flex flex-col gap-2 items-center p-2 rounded-lg ">
-          <Button className="w-full" variant={"ghost"}>
-            Form
+        <Panel position="top-right" className="border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/70 backdrop-blur-md dark:backdrop-blur-lg flex flex-col gap-2 items-center p-2 rounded-lg ">
+          <Button
+            onDragStart={(e) => onDragStartNewNode(e, "form")}
+            className="w-full gap-2 justify-start flex items-center"
+            variant={"ghost"}
+            draggable
+          >
             <FormInput />
+            Form
           </Button>
           <DropdownMenuSeparator />
-          <Button className="w-full" variant={"ghost"}>
+          <Button
+            onDragStart={(e) => onDragStartNewNode(e, "condition")}
+            className="w-full gap-2 justify-start  flex items-center"
+            variant={"ghost"}
+            draggable
+          >
+            <Workflow />
             Conditional
           </Button>
           <DropdownMenuSeparator />
-          <Button className="w-full" variant={"ghost"}>
+          <Button
+            onDragStart={(e) => onDragStartNewNode(e, "approval")}
+            className="w-full gap-2 flex justify-start  items-center"
+            variant={"ghost"}
+            draggable
+          >
+            <User />
             Approver
           </Button>
           <DropdownMenuSeparator />
-          <Button className="w-full" variant={"ghost"}>
+          <Button
+            onDragStart={(e) => onDragStartNewNode(e, "webhook")}
+            className="w-full gap-2 flex justify-start  items-center"
+            variant={"ghost"}
+            draggable
+          >
+            <Webhook />
             Webhook
           </Button>
         </Panel>

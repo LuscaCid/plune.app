@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,6 +19,19 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs")
     }
+  });
+  ipcMain.on("minimize", () => {
+    win == null ? void 0 : win.minimize();
+  });
+  ipcMain.on("resize", () => {
+    if (win == null ? void 0 : win.isMaximized()) {
+      win.unmaximize();
+      return;
+    }
+    win == null ? void 0 : win.maximize();
+  });
+  ipcMain.on("close", () => {
+    win == null ? void 0 : win.close();
   });
   win.webContents.on("did-finish-load", () => {
     win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());

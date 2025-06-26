@@ -4,7 +4,7 @@ import "@reactflow/node-resizer/dist/style.css"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { FormProvider, useForm } from "react-hook-form";
-import type { FlownNodeData } from "@/@types/Flow";
+import type { FlowNodeData } from "@/@types/Flow";
 import { Button } from "../ui/button";
 import { FlowCard } from "../ui/FlowCard";
 import { Pencil, Trash } from "lucide-react";
@@ -15,7 +15,7 @@ import { useRoles } from "@/hooks/use-roles";
 import { CustomDropdownMenuItem } from "../UserDropdown";
 import { DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from "../ui/dropdown-menu";
 
-export const FormNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>) => {
+export const FormNodeType = React.memo((nodeProps: NodeProps<FlowNodeData>) => {
   const methods = useForm();
   const path = useLocation();
   const { canEdit } = useRoles();
@@ -26,7 +26,6 @@ export const FormNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>) => 
   }, [])
   return (
     <FlowCard
-    
       dropdownContent={
         isModelsPage && canEdit(selectedOrganization!) && (
           <DropdownMenuContent>
