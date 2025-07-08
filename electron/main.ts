@@ -25,7 +25,7 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    frame: false,
+    frame: true,
     minWidth: 900,
     minHeight: 700,
     height: 700,
