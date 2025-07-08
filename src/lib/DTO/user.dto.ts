@@ -1,6 +1,7 @@
 import z from "zod";
 
 export class UserDto {
+  static userOrganization = z.object({})
   static signUp = z.object({
     email: z.string().email(),
     password: z.string().min(6),
