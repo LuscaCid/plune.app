@@ -16,7 +16,7 @@ export function useUser() {
   const update = useCallback(() => { }, []);
 
   const signIn = useCallback(async (data: UserSignInDTO) => {
-    const response = await api.post(PATH + "/signIn",  data)
+    const response = await api.post(PATH + "/signIn", data)
     return response.data
   }, []);
 
@@ -25,6 +25,7 @@ export function useUser() {
     return response.data
   }, []);
 
+ 
   return {
     logout,
     update,
