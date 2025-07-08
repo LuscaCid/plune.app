@@ -1,5 +1,5 @@
 import { useUserStore } from "@/store/user";
-import { BrowserRouter } from "react-router-dom"
+import { HashRouter } from "react-router-dom"
 import { AppRoutes } from "./app.routes";
 import { AuthRoutes } from "./auth.routes";
 import { Toaster } from "@/components/ui/sonner";
@@ -15,9 +15,9 @@ export function Router() {
     }
   },[theme])
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Toaster />
       {user ? <AppRoutes /> : <AuthRoutes />}
-    </BrowserRouter>
+    </HashRouter>
   )
 }
