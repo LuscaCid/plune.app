@@ -3,9 +3,17 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { TypographyH4 } from "./ui/Typography";
 import { Minus, Square, SunMoon, X } from "lucide-react";
 import { useThemeStore } from "@/store/theme";
+import { useLocation } from "react-router-dom";
+import { useCallback, useMemo, useState } from "react";
 
 export function AppHeader() {
   const { setTheme, theme } = useThemeStore();
+  const location = useLocation();
+
+  console.log(location.pathname);
+
+  const getHeaderTitleAccordingRoute = useCallback(() => {
+  }, [location]);
   return (
     <header
       className={` title-bar-drag-region backdrop-blur-lg z-[100000]  fixed md:static  py-2 px-4  h-fit flex items-center bg-white/80   md:bg-zinc-50/80 dark:bg-zinc-900 dark:bg-[oklch(0.21 0.01 0)]  border-b w-full border-zinc-200 dark:border-zinc-800 `}
@@ -13,7 +21,7 @@ export function AppHeader() {
       <aside className="flex items-center gap-1">
         <SidebarTrigger size={"lg"} className="no-drag" />
         <div className="h-full w-[1px] bg-zinc-100 dark:bg-zinc-800" />
-        <TypographyH4 content="/Dashboard" />
+        <TypographyH4 content={"/" + location.pathname.split("/")[1]}/>
       </aside>
       <aside className="flex items-center gap-2 no-drag self-end">
         <Button

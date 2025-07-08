@@ -9,7 +9,7 @@ export function AuthLayout() {
     <main
       className={`w-full h-screen relative flex items-center justify-center bg-white dark:bg-zinc-950 `}
     >
-      <div className="w-[400px] lg:h-[90%]  2xl:h-[70%]">
+      <div className="w-[400px]  2xl:h-[70%]">
         <Outlet />
       </div>
       <Button variant={"outline"} className="absolute bottom-10 left-10" size={"icon"} onClick={() => setTheme(theme == "dark" ? "light" : "dark")}>

@@ -69,7 +69,7 @@ export const SignIn = memo(() => {
                 <FormLabel htmlFor="password">
                   Password
                 </FormLabel>
-                <Input<keyof UserSignInDTO> id="password" name="password" />
+                <Input<keyof UserSignInDTO> type={"password"} id="password" name="password" />
                 <FormDescription>
                   Dont tell your password to anyone
                 </FormDescription>
