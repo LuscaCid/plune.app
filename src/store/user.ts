@@ -13,7 +13,6 @@ const userMock: User = {
   lastAccess: "2023-10-01T12:00:00Z",
   name: "Lucas",
   status: "Active",
-  organizationRoles: [ mockedOrganization ],
 }
 
 interface UserState {

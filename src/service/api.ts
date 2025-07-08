@@ -2,8 +2,8 @@ import axios from "axios";
 // const isDev = import.meta.env["VITE_DEV"];
 
 const routes = { 
-  dev : "http://localhost:3001",
-  prod : "https://plune.api.com/api"
+  dev : "http://localhost:4000/v1/api",
+  prod : "https://plune.api.com/v1/api"
 }
 // const route = isDev == "true" ? routes.dev : routes.prod;
 
