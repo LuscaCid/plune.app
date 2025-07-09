@@ -1,10 +1,11 @@
 import { Organization } from "@/@types/Organization";
+import { InviteDialog } from "@/components/InviteDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { FormDescription, FormItem, FormLabel } from "@/components/ui/form";
 import { FormWrapper } from "@/components/ui/FormWrapper";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/FormInput";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { TypographyH2 } from "@/components/ui/Typography";
 import { userOrganizations } from "@/hooks/use-organization";
@@ -60,10 +61,10 @@ const NewOrganizationCard = memo(() => {
           </DialogTrigger>
           <DialogContent >
             <DialogTitle>
-              Nova organização
+              New Organization
             </DialogTitle>
             <DialogDescription>
-              Adicione usuários à sua nova organization
+              Add new users into the organization
             </DialogDescription>
             <OrganizationForm />
           </DialogContent>
@@ -89,7 +90,7 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
     mutationKey: ["save-org"],
     onSuccess: (_, variable) => {
       toast("Organization saved");
-      queryClient.setQueryData(["user-organizations", user?.email], (prev : Organization[]) => {
+      queryClient.setQueryData(["user-organizations", user?.email], (prev: Organization[]) => {
         if (variable.id) {
           return prev.map((data) => {
             if (data.id === variable.id) {
@@ -104,8 +105,8 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
       console.log(err)
     }
   })
-  const handleSubmit = useCallback(async (data : SaveOrgDTO) => { 
-    await mutateAsync(data); 
+  const handleSubmit = useCallback(async (data: SaveOrgDTO) => {
+    await mutateAsync(data);
   }, [])
   return (
     <FormProvider {...methods}>
@@ -114,7 +115,7 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
           <FormLabel htmlFor="name">
             Name
           </FormLabel>
-          <Input
+          <FormInput
             id="name"
             {...methods.register("name")}
           />
@@ -122,6 +123,8 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
             How the organization will be called
           </FormDescription>
         </FormItem>
+            <InviteDialog />
+
         <SubmitButton isPending={isPending} />
       </FormWrapper>
     </FormProvider>

@@ -21,12 +21,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-export default function Component() {
-  const id = useId()
+export function InviteDialog() {
   const [emails, setEmails] = useState([
     "mark@yourcompany.com",
     "jane@yourcompany.com",
-    "",
   ])
   const [copied, setCopied] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,7 +51,7 @@ export default function Component() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Invite members</Button>
+        <Button type="button" variant="outline">Invite members</Button>
       </DialogTrigger>
       <DialogContent
         onOpenAutoFocus={(e) => {
@@ -106,15 +104,12 @@ export default function Component() {
             Send invites
           </Button>
         </form>
-
         <hr className="my-1 border-t" />
-
         <div className="*:not-first:mt-2">
-          <Label htmlFor={id}>Invite via magic link</Label>
+          <Label>Invite via magic link</Label>
           <div className="relative">
             <Input
               ref={inputRef}
-              id={id}
               className="pe-9"
               type="text"
               defaultValue="https://originui.com/refer/87689"
