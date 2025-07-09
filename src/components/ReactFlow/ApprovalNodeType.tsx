@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { DefaultNodeComponents } from "./DefaultNodeComponents";
 import type { NodeProps } from "reactflow";
-import type { FlownNodeData } from "@/@types/Flow";
-import { Input } from "../ui/FormInput";
+import type { FlowNodeData } from "@/@types/Flow";
+import { FormInput } from "../ui/FormInput";
 import { Button } from "../ui/button";
 import { Check } from "lucide-react";
 import { FlowCard } from "../ui/FlowCard";
 
-export const ApprovalNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>) => {
+export const ApprovalNodeType = React.memo((nodeProps: NodeProps<FlowNodeData>) => {
   //posteriormente verificar cargo de usuario para realizar edição de campos dentro do flow model
   const [fieldsEnabled, setFieldsEnabled] = useState(false);
 
@@ -19,7 +19,7 @@ export const ApprovalNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>)
       <form className="flex flex-col gap-2">
         {nodeProps.data.approvers && (
           nodeProps.data.approvers.map((approver) => (
-            <Input
+            <FormInput
               className="cursor-text"
               onDoubleClick={() => {
                 if (!fieldsEnabled) {

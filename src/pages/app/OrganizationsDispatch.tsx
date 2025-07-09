@@ -1,5 +1,5 @@
 import { Organization } from "@/@types/Organization";
-import { InviteDialog } from "@/components/InviteDialog";
+import { InviteDialog, UsersOrgPayload } from "@/components/InviteDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -13,14 +13,15 @@ import { OrganizationDto, SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { useUserStore } from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
-import { memo, useCallback } from "react";
+import { ArrowLeft, Plus } from "lucide-react";
+import { memo, useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useUser } from "@/hooks/use-user";
 
 export const OrganizationDispatch = memo(() => {
   const { getUserOrganizations } = userOrganizations();
-
+  const { logout } = useUser()
   const user = useUserStore(state => state.user);
 
   const { data: response } = useQuery({
@@ -42,6 +43,9 @@ export const OrganizationDispatch = memo(() => {
         ))}
         <NewOrganizationCard />
       </div>
+      <Button onClick={logout} className="absolute bottom-10 left-10 flex items-center">
+        <ArrowLeft size={15} /> Logout
+      </Button>
     </main>
   )
 })
@@ -74,15 +78,15 @@ const NewOrganizationCard = memo(() => {
   )
 })
 
-export const OrganizationForm = memo((org: Partial<Organization>) => {
+export const OrganizationForm = memo(({ organization }: { organization?: Organization }) => {
   const user = useUserStore(state => state.user);
-
+  const [usersOrg, setUsersOrg] = useState<UsersOrgPayload[]>([]);
   const { saveOrganization } = userOrganizations();
   const queryClient = useQueryClient();
   const methods = useForm<SaveOrgDTO>({
     resolver: zodResolver(OrganizationDto.SaveOrgDto),
     defaultValues: {
-      name: org && org.name ? org.name : "",
+      name: organization && organization.name ? organization.name : "",
     }
   });
   const { mutateAsync, isPending } = useMutation({
@@ -123,8 +127,11 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
             How the organization will be called
           </FormDescription>
         </FormItem>
-            <InviteDialog />
-
+        <InviteDialog
+          setUsersOrg={setUsersOrg}
+          usersOrg={usersOrg}
+          organization={organization}
+        />
         <SubmitButton isPending={isPending} />
       </FormWrapper>
     </FormProvider>
