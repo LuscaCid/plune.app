@@ -24,7 +24,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+import { FormInput } from "@/components/ui/FormInput"
 import {
   Table,
   TableBody,
@@ -119,7 +119,7 @@ export function GenericTable<T extends RowData>({
     <div className="w-full">
       <div className="flex items-center py-4">
         {searchFilterColumnInput && (
-          <Input
+          <FormInput
             placeholder={searchFilterColumnInput.placelholder}
             value={(table.getColumn(searchFilterColumnInput.accssorKey)?.getFilterValue() as string) ?? ""}
             onChange={(event) =>

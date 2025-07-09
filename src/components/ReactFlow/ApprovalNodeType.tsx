@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DefaultNodeComponents } from "./DefaultNodeComponents";
 import type { NodeProps } from "reactflow";
 import type { FlownNodeData } from "@/@types/Flow";
-import { Input } from "../ui/input";
+import { Input } from "../ui/FormInput";
 import { Button } from "../ui/button";
 import { Check } from "lucide-react";
 import { FlowCard } from "../ui/FlowCard";

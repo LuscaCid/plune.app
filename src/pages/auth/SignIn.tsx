@@ -3,7 +3,7 @@ import { ScreenWrapper } from "@/components/ScreenWrapper";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormDescription, FormItem, FormLabel } from "@/components/ui/form";
 import { FormWrapper } from "@/components/ui/FormWrapper";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/FormInput";
 import { SubmitButton } from "@/components/ui/SubmitButton";
 import { useUser } from "@/hooks/use-user";
 import { UserDto, UserSignInDTO } from "@/lib/DTO/user.dto";
@@ -62,13 +62,13 @@ export const SignIn = memo(() => {
                 <FormLabel htmlFor="e-mail">
                   E-mail
                 </FormLabel>
-                <Input<keyof UserSignInDTO> id="e-mail" name="email" />
+                <FormInput<keyof UserSignInDTO> id="e-mail" name="email" />
               </FormItem>
               <FormItem>
                 <FormLabel htmlFor="password">
                   Password
                 </FormLabel>
-                <Input<keyof UserSignInDTO> type={"password"} id="password" name="password" />
+                <FormInput<keyof UserSignInDTO> type={"password"} id="password" name="password" />
                 <FormDescription>
                   Dont tell your password to anyone
                 </FormDescription>
