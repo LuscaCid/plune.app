@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 export function useUser() {
   const PATH = "/users"
   const clearUser = useUserStore(state => state.clearUser);
+  const setSelectedOrganization = useUserStore(state => state.setSelectedOrganization);
   const navigate = useNavigate();
+
   const logout = useCallback(() => {
     clearUser();
+    localStorage.removeItem("@plune-app/token")
+    setSelectedOrganization(null)
     navigate("/")
   }, [clearUser]);
 
@@ -24,7 +28,6 @@ export function useUser() {
     const response = await api.post(PATH + "/signUp", data)
     return response.data
   }, []);
-
  
   return {
     logout,

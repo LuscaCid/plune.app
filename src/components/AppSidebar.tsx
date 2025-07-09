@@ -66,10 +66,10 @@ export function AppSidebar() {
             {footerItems.map((item) => (
               <SidebarMenuItem key={item.url + item.title}>
                 <SidebarMenuButton className="flex gap-2 items-center" asChild>
-                  <a href={item.url}>
+                  <Link to={item.url}>
                     <item.icon size={20} />
                     {item.title}
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
