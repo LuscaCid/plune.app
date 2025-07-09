@@ -7,7 +7,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import { Tooltip } from "./tooltip";
 import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
 interface InputProps<T extends string> extends React.ComponentProps<"input"> {
-  name: T
+  name?: T
   type?: "text" | "email" | "password" | "number";
 }
 function Input<T extends string>({ className, type = "text", name, ...props }: InputProps<T>) {
