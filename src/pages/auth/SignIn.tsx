@@ -25,7 +25,6 @@ export const SignIn = memo(() => {
     mutationKey: ['user-signin'],
     onError: (err) => {
       if (err instanceof AxiosError) {
-        console.log(err);
         toast(err.message)
       }
     },
