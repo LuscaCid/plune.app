@@ -65,6 +65,7 @@ const NewOrganizationCard = memo(() => {
             <DialogDescription>
               Adicione usuários à sua nova organization
             </DialogDescription>
+            <OrganizationForm />
           </DialogContent>
         </Dialog>
       </CardContent>
@@ -114,6 +115,7 @@ export const OrganizationForm = memo((org: Partial<Organization>) => {
             Name
           </FormLabel>
           <Input
+            id="name"
             {...methods.register("name")}
           />
           <FormDescription>
