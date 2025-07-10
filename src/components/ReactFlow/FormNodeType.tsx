@@ -2,7 +2,7 @@ import { NodeToolbar, Position, type NodeProps } from "reactflow";
 import React, { useCallback } from "react";
 import "@reactflow/node-resizer/dist/style.css"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Input } from "../ui/input";
+import { FormInput } from "../ui/FormInput";
 import { FormProvider, useForm } from "react-hook-form";
 import type { FlowNodeData } from "@/@types/Flow";
 import { Button } from "../ui/button";
@@ -50,10 +50,9 @@ export const FormNodeType = React.memo((nodeProps: NodeProps<FlowNodeData>) => {
                 name={formField.name}
                 render={({ field }) => (
                   < FormItem className="p-2 rounded-lg">
-
                     <FormLabel>{formField.label}</FormLabel>
                     <FormControl>
-                      <Input
+                      <FormInput
                         disabled
                         required={formField.required}
                         placeholder={formField.label}

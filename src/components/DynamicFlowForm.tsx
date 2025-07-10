@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
+import { FormInput } from "./ui/FormInput";
 import { Grip } from "lucide-react";
 interface Props {
   form?: Form;
@@ -71,7 +71,7 @@ export function DynamicFlowForm({ form, isEditable }: Props) {
                       < FormItem className="p-2 rounded-lg border border-dashed w-full">
                         <FormLabel>{order.label}</FormLabel>
                         <FormControl>
-                          <Input
+                          <FormInput
                             required={order.required}
                             placeholder={order.label}
                             {...field}

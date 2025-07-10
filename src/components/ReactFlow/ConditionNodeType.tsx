@@ -1,13 +1,13 @@
 import { Handle, Position, type NodeProps } from "reactflow";
 import { DefaultNodeComponents } from "./DefaultNodeComponents";
-import type { FlownNodeData } from "@/@types/Flow";
+import type { FlowNodeData } from "@/@types/Flow";
 import { TypographyMuted, TypographySmall } from "../ui/Typography";
 import React from "react";
-import { Input } from "../ui/input";
+import { FormInput } from "../ui/FormInput";
 import { Card } from "../ui/card";
 import { FlowCard } from "../ui/FlowCard";
 
-export const ConditionNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>) => {
+export const ConditionNodeType = React.memo((nodeProps: NodeProps<FlowNodeData>) => {
 
   //validar a regra de acordo com os valores dentro do formulário
   return (
@@ -23,10 +23,10 @@ export const ConditionNodeType = React.memo((nodeProps: NodeProps<FlownNodeData>
       </header>
       {nodeProps.data.rules && nodeProps.data.rules.map((rule, idx) => (
         <Card className="flex flex-col gap-2 px-2 py-3" key={rule.fieldName + idx}>
-          <Input value={rule.fieldName} disabled />
-          <Input value={rule.operator} disabled />
+          <FormInput value={rule.fieldName} disabled />
+          <FormInput value={rule.operator} disabled />
           {(typeof rule.value === "string" || typeof rule.value == "number") && (
-            <Input value={rule.value} disabled />
+            <FormInput value={rule.value} disabled />
           )}
           <TypographySmall className="mt-2 ml-1" content={"if ok? -> "+rule.targetNodeId}/>
         </Card>

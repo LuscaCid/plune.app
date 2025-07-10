@@ -1,3 +1,4 @@
+import { User } from "@/@types/user";
 import { UserSignInDTO, UserSignUpDTO } from "@/lib/DTO/user.dto";
 import { api } from "@/service/api";
 import { useUserStore } from "@/store/user";
@@ -29,7 +30,12 @@ export function useUser() {
     return response.data
   }, []);
  
+  const getUsersByEmail = useCallback(async(email: string) => {
+    const response = await api.get(`/users?email=${email}`);
+    return response.data as { data : User[]}
+  }, [])
   return {
+    getUsersByEmail,
     logout,
     update,
     signIn,

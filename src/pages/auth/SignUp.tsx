@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormDescription, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { FormInput } from "@/components/ui/FormInput";
 import { UserDto, UserSignUpDTO } from "@/lib/DTO/user.dto";
 import { memo, useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -78,7 +78,7 @@ export const SignUp = memo(() => {
                 <FormLabel htmlFor="name">
                   Name
                 </FormLabel>
-                <Input<keyof UserSignUpDTO> id="name" name="name" />
+                <FormInput<keyof UserSignUpDTO> id="name" name="name" />
                 <FormDescription>
                   It's how your name will apear to others users 
                 </FormDescription>
@@ -87,7 +87,7 @@ export const SignUp = memo(() => {
                 <FormLabel>
                   E-mail
                 </FormLabel>
-                <Input<keyof UserSignUpDTO> name="email" />
+                <FormInput<keyof UserSignUpDTO> name="email" />
                 <FormDescription>
                   The application e-mail thats will be used for connections
                 </FormDescription>
@@ -96,7 +96,7 @@ export const SignUp = memo(() => {
                 <FormLabel>
                   Password
                 </FormLabel>
-                <Input<keyof UserSignUpDTO> name="password"/>
+                <FormInput<keyof UserSignUpDTO> name="password"/>
                 <FormDescription>
                   Dont tell your password to anyone
                 </FormDescription>
@@ -105,7 +105,7 @@ export const SignUp = memo(() => {
                 <FormLabel>
                   Repeat password
                 </FormLabel>
-                <Input {...methods.register("password")} />
+                <FormInput {...methods.register("password")} />
                 <FormDescription>
                   repeat your password exactly as above 
                 </FormDescription>

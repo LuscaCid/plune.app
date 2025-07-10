@@ -1,19 +1,24 @@
 import { Organization } from "@/@types/Organization";
+import { Roles } from "@/@types/user";
 import { SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { api } from "@/service/api";
 import { useUserStore } from "@/store/user";
 import { useCallback } from "react";
-
+interface UserOrganizationsReturn {
+  id: number;
+  role: Roles;
+  organization: {
+    id: number;
+    name: string;
+    createdAt: Date;
+    logo: string;
+  }
+}
 export function userOrganizations() {
-  const setOrganizations = useUserStore(state => state.setOrganizations);
-
   const getUserOrganizations = useCallback(async () => {
     const response = await api.get("/organizations");
-    const data = response.data as { data: Organization[], };
-    setOrganizations(data.data);
-    return data;
-
-  }, [setOrganizations]);
+    return response.data as { data: UserOrganizationsReturn[]; };
+  }, []);
 
   const saveOrganization = useCallback(async (data: SaveOrgDTO) => {
     if (data.id) {
@@ -23,7 +28,7 @@ export function userOrganizations() {
     const response = await api.post("/organizations", data);
     return response.data;
   }, [])
-  
+
   return {
     getUserOrganizations,
     saveOrganization
