@@ -1,5 +1,4 @@
 import type { Form, FormField as FormFieldType } from "@/@types/Form";
-import { useUserStore } from "@/store/user";
 import { Reorder, useDragControls, useMotionValue } from "framer-motion";
 import { useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -11,14 +10,14 @@ interface Props {
   form?: Form;
   isEditable?: boolean;
 }
-export function DynamicFlowForm({ form, isEditable }: Props) {
-  const user = useUserStore(state => state.user);
+export function DynamicFlowForm({ form }: Props) {
+  // const user = useUserStore(state => state.user);
   const methods = useForm();
   const y = useMotionValue(0);
   const dragControls = useDragControls();
 
   const [fieldsOrder, setFieldsOrder] = useState<FormFieldType[]>(form ? form.fields : []);
-  const [fieldsIds, setFieldsIds] = useState(
+  const [fieldsIds] = useState(
     form && form.fields ? form.fields.map((field) => field.name) : []
   );
 

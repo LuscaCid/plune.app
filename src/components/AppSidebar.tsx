@@ -17,7 +17,7 @@ import { NativeUserDropdown } from "./UserDropdown";
 export function AppSidebar() {
 
   return (
-    <Sidebar collapsible="icon" variant="inset" className=" border-zinc-200  border-r dark:border-zinc-800" >
+    <Sidebar collapsible="icon" variant="inset"  >
       <SidebarHeader className=" title-bar-drag-region">
         <Link to={"/"}>
           <SidebarMenuItem className="flex no-drag ">
@@ -27,7 +27,6 @@ export function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </Link>
-
       </SidebarHeader>
       <SidebarContent className="p-2 flex flex-col justify-between dark:bg-zinc-900" >
         <SidebarGroupContent>

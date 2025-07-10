@@ -1,46 +1,71 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import express from "express";
+import { autoUpdater } from "electron-updater"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const { autoUpdater } = require("electron-updater");
-
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.mjs
-// │
+// import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 process.env.APP_ROOT = path.join(__dirname, '..')
 
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
-
 let win: BrowserWindow | null
-
+// let backendProcess : ChildProcessWithoutNullStreams |null = null; 
 function createWindow() {
+  const serverProcess = express();
+  const staticPath = path.join(__dirname, '..', 'dist');
+  serverProcess.use(express.static(staticPath));
+
+  //em proceso de build, o redirecionamento dos arquivos estaticos (index.html) esta para dist/index.html
+  serverProcess.listen(3002, () => console.log('Serving the dist application in: http://localhost:3002'));
+  serverProcess.get("*", (_, res) => {
+    res.sendFile(path.join(staticPath, 'index.html'));
+  })
+
+  //criacao da instancia da aplicação backend de forma local
+  // try {
+  //   const pathName = path.join(__dirname, '..', 'dist-api', 'src', 'main')
+  //   backendProcess = spawn('node', [pathName], );
+    
+  //   backendProcess.stdout.on("data", (data) => {
+  //     console.log(`Backend: ${data}`);
+  //   });   
+
+  //   backendProcess.stderr.on("data", (data) => {
+  //     console.error(`Erro no backend: ${data}`);
+  //   });
+  
+  // } catch (err) 
+  // {
+  //   console.log(err);
+  // }
+ 
   win = new BrowserWindow({
-    frame: !Boolean(process.env.VITE_PUBLIC),
-    minWidth: 900,
-    minHeight: 700,
-    height: 700,
-    width: 1200,
+    frame: true,
+    transparent : false,
+    show :false,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
+      
+      nodeIntegration : true,
+      contextIsolation : true,
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
+  win.webContents.on('before-input-event', (event, input) => {
+  if (input.key === 'F12' || (input.control && input.key === 'I')) {
+    event.preventDefault(); // Impede que o DevTools seja aberto
+  }
+});
   ipcMain.on('minimize', () => {
     win?.minimize()
   })
   ipcMain.on('resize', () => {
-    if (win?.isMaximized()) {
+    if (win?.isMaximized()) 
+    {
       win.unmaximize();
       return;
     }
@@ -49,8 +74,11 @@ function createWindow() {
   ipcMain.on('close', () => {
     win?.close()
   })
-  // Test active push message to Renderer-process.
+  win.setMinimumSize(1000, 600);
+  win.setSize(1200, 700);
   win.webContents.on('did-finish-load', () => {
+    win?.show();
+    win?.focus();
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
 
@@ -58,13 +86,9 @@ function createWindow() {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
     // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+    win.loadURL("http://localhost:3002")
   }
 }
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
@@ -73,14 +97,12 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
+  autoUpdater.checkForUpdatesAndNotify();
     createWindow()
   }
 })
 
-app.whenReady().then(() => {
-  autoUpdater.checkForUpdatesAndNotify();
-  createWindow()
-})
+app.whenReady().then(createWindow)
+// app.on('quit', () => backendProcess?.kill())
+

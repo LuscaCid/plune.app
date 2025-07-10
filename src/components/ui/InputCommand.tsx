@@ -1,9 +1,8 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Command, CommandGroup, CommandItem, CommandList } from "./command";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Button } from "./button";
 import { twMerge } from "tailwind-merge";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { Option } from "./MultiSelectControlled";
 import { cn } from "@/lib/utils";
 import { Input } from "./Input";
