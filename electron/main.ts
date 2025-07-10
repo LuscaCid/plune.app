@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const { autoUpdater } = require("electron-updater");
 
 // The built directory structure
 //
@@ -25,7 +26,7 @@ let win: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    frame: true,
+    frame: !Boolean(process.env.VITE_PUBLIC),
     minWidth: 900,
     minHeight: 700,
     height: 700,
@@ -79,4 +80,7 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  autoUpdater.checkForUpdatesAndNotify();
+  createWindow()
+})

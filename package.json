@@ -1,8 +1,23 @@
 {
   "name": "plune-desktop",
   "private": true,
+  "author": { "email": "lucasfelipaaa@gmail.com", "name": "Lucas Felipe Lima Cid"},
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://github.com/LuscaCid/plune.app",
+  "build": {
+    "appId": "com.plune.plune.app",
+    "productName": "plune-app",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "LuscaCid",
+        "repo": "plune.app",
+        "releaseType": "release",
+        "vPrefixedTagName": true
+      }
+    ]
+  },
   "scripts": {
     "dev": "vite",
     "server": "json-server --watch db.json --port 3001",
@@ -14,7 +29,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "next-themes": "^0.4.6",
     "radix-ui": "^1.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
