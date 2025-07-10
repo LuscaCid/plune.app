@@ -27,7 +27,7 @@ import MultipleSelector, { Option } from "./ui/multiselect"
 import { TypographySmall } from "./ui/Typography"
 import { useUser } from "@/hooks/use-user"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { Input } from "./ui/input"
+import { Input } from "./ui/Input"
 
 const roles: Roles[] = ["Admin", "Approver", "Editor", "Viewer"];
 

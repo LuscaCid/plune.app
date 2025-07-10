@@ -19,7 +19,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useUser } from "@/hooks/use-user";
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { CustomDropdownMenuItem } from "@/components/UserDropdown";
 

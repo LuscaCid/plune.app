@@ -1,8 +1,6 @@
-import { Organization } from "@/@types/Organization";
 import { Roles } from "@/@types/user";
 import { SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { api } from "@/service/api";
-import { useUserStore } from "@/store/user";
 import { useCallback } from "react";
 interface UserOrganizationsReturn {
   id: number;
