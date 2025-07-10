@@ -1,6 +1,6 @@
 "use client"
-import { ChangeEvent, Dispatch, SetStateAction, useCallback, useEffect, useId, useRef, useState } from "react"
-import { CheckIcon, CopyIcon, EllipsisVertical, Loader2, UserRoundPlusIcon, X } from "lucide-react"
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react"
+import { CheckIcon, CopyIcon, EllipsisVertical, Loader2, UserRoundPlusIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -21,17 +21,16 @@ import {
 } from "@/components/ui/tooltip"
 import { Organization } from "@/@types/Organization"
 import { DialogClose } from "@radix-ui/react-dialog"
-import { OrganizationRole, Roles, User } from "@/@types/user"
+import { Roles, User } from "@/@types/user"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { UserSidebarButton } from "./UserDropdown"
 import MultipleSelector, { Option } from "./ui/multiselect"
-import { Input } from "./ui/Input"
 import { TypographySmall } from "./ui/Typography"
-import { useQuery } from "@tanstack/react-query"
-import { userOrganizations } from "@/hooks/use-organization"
 import { useUser } from "@/hooks/use-user"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Input } from "./ui/input"
+
 const roles: Roles[] = ["Admin", "Approver", "Editor", "Viewer"];
+
 export interface UsersOrgPayload extends User {
   role?: Roles
 }
@@ -45,10 +44,6 @@ export function InviteDialog({ organization, usersOrg, setUsersOrg }: InviteDial
   const inputRef = useRef<HTMLInputElement>(null);
   const lastInputRef = useRef<HTMLInputElement>(null);
   const { getUsersByEmail } = useUser();
-
-  const handleDeleteUser = useCallback((id: string) => {
-    setUsersOrg(usersOrg.filter(data => data.id !== id));
-  }, [usersOrg]);
 
   const handleCopy = useCallback(() => {
     if (inputRef.current) {
@@ -64,9 +59,9 @@ export function InviteDialog({ organization, usersOrg, setUsersOrg }: InviteDial
       return data
         .map((user) => ({
           label: user.email,
-          value: user.id!,
+          value: user.id?.toString()!,
           avatar: user.avatar,
-          role : "Viewer"
+          role: "Viewer"
         } satisfies Option))
     }
     return []
@@ -103,6 +98,17 @@ export function InviteDialog({ organization, usersOrg, setUsersOrg }: InviteDial
             <div className="*:not-first:mt-2">
               <Label>Invite via email</Label>
               <MultipleSelector
+                //TODO : DEFINE MAX USERS SELECTED ACCORDING PLAN IN FUTURE
+                value={
+                  usersOrg.map(
+                    (user) => ({
+                      label: user.email,
+                      value: user.id!.toString(),
+                      role: user.role
+                    } satisfies Option)
+                  )
+                }
+                maxSelected={20}
                 DropdownMenuRole={({ option, selectedOptions, setSelectedOptions }) => {
                   const handleSelectRole = (role: Roles) => {
                     const newOptions = selectedOptions.map((opt) => {
@@ -113,37 +119,38 @@ export function InviteDialog({ organization, usersOrg, setUsersOrg }: InviteDial
                     })
                     setSelectedOptions(newOptions);
                   }
-
                   return (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant={"outline"}>
-                          {option.role ? (option.role as string).charAt(0) : "V"}
-                          <EllipsisVertical size={15} />
-                        </Button>
+                    <DropdownMenu >
+                      <DropdownMenuTrigger className="flex items-center px-2 rounded-full">
+                        {option.role ? (option.role as string).charAt(0) : "V"}
+                        <EllipsisVertical size={15} />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent>
+                      <DropdownMenuContent className="z-50">
                         <DropdownMenuLabel>
                           Roles
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {roles.map((role) => (
-                          <DropdownMenuItem asChild key={role}>
-                            <Button
-                              onClick={() => handleSelectRole(role)}
-                              variant={"ghost"}
-                              className="w-full items-start text-left"
-                            >
-                              {role}
-                            </Button>
+                          <DropdownMenuItem onClick={() => handleSelectRole(role)} key={role}>
+                            {role}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   )
                 }}
-                emptyIndicator={<>No results found</>}
-                onChange={(val) => console.log(val)}
+                emptyIndicator={<div className="text-muted-foreground">No results found</div>}
+                onChange={
+                  (val) => setUsersOrg(
+                    val.map((opt) => ({
+                      id: Number(opt.value),
+                      email: opt.label,
+                      role: opt.role,
+                      name: opt.label,
+
+                    } as UsersOrgPayload))
+                  )
+                }
                 loadingIndicator={<Loader2 className="animate-spin m-auto" />}
                 onSearch={onSearch}
                 OptionItem={
@@ -159,25 +166,12 @@ export function InviteDialog({ organization, usersOrg, setUsersOrg }: InviteDial
                     </div>
                 }
               />
-              <div className="space-y-3 ">
-                {usersOrg.map((data, index) => (
-                  <div key={index} className="flex  gap-2">
-                    <UserSidebarButton user={data} />
-                    <Button
-                      onClick={() => handleDeleteUser(data.id!)}
-                      size={"icon"}
-                      variant={"ghost"}>
-                      <X size={15} />
-                    </Button>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
           <DialogClose asChild>
             <Button
               type="button"
-              disabled={usersOrg.length == 0 || !usersOrg.find(userOrg => userOrg.email != "")}
+              disabled={usersOrg.length == 0}
               className="w-full"
             >
               Save

@@ -13,17 +13,21 @@ import { OrganizationDto, SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { useUserStore } from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, EllipsisVertical, Plus, Trash } from "lucide-react";
 import { memo, useCallback, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useUser } from "@/hooks/use-user";
 
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { CustomDropdownMenuItem } from "@/components/UserDropdown";
+
 export const OrganizationDispatch = memo(() => {
   const { getUserOrganizations } = userOrganizations();
   const { logout } = useUser()
   const user = useUserStore(state => state.user);
-
+  const setSelectedOrganization = useUserStore(state => state.setSelectedOrganization);
   const { data: response } = useQuery({
     queryFn: getUserOrganizations,
     queryKey: ["user-organizations", user?.email]
@@ -31,14 +35,53 @@ export const OrganizationDispatch = memo(() => {
   return (
     <main className="flex flex-col gap-3">
       <TypographyH2 content={`${response && response?.data.length >= 0 ? "Your organizations" : "Create an new organization"}`} />
-      <div className=" grid grid-cols-1 md:grid-cols-3  items-center justify-center ">
+      <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center ">
         {response && response.data.map((item, idx) => (
           <Card key={idx}>
-            <CardHeader>
-              <CardTitle>
-                {item.name}
-              </CardTitle>
+            <CardHeader className="flex justify-between ">
+              <main className="space-y-2">
+                <CardTitle>
+                  {item.organization.name}
+                </CardTitle>
+                <CardDescription>
+                  Your role - {item.role}
+                </CardDescription>
+                <CardDescription className="self-end">
+                  {formatDistanceToNow(item.organization.createdAt, { addSuffix: true })}
+                </CardDescription>
+              </main>
+              <aside>
+                <DropdownMenu>
+                  <DropdownMenuTrigger >
+                    <Button variant={"ghost"}>
+                      <EllipsisVertical size={15} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>
+                      Actions
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <CustomDropdownMenuItem icon={ArrowLeft} title="Exit" onClick={() => { }} />
+                    <CustomDropdownMenuItem icon={Trash} onClick={() => { }} title="Delete" variant="destructive" />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </aside>
             </CardHeader>
+            <CardContent>
+              <Button
+                className={"w-full group"}
+                variant={'outline'}
+                onClick={() => setSelectedOrganization({
+                  organizationId : item.organization.id,
+                  organizationName : item.organization.name,
+                  organizationLogo : item.organization.logo ?? "",
+                  role : item.role
+                })}
+              >
+                Join <ArrowRight className="group-hover:translate-x-2 transition duration-200" size={20} />
+              </Button>
+            </CardContent>
           </Card>
         ))}
         <NewOrganizationCard />
@@ -52,14 +95,14 @@ export const OrganizationDispatch = memo(() => {
 
 const NewOrganizationCard = memo(() => {
   return (
-    <Card>
-      <CardContent className="flex flex-col gap-5 items-start justify-center">
+    <Card className="h-full ">
+      <CardContent className="h-full flex flex-col gap-5 items-start justify-between">
         <CardTitle className="text-muted-foreground">
           New Organization
         </CardTitle>
         <Dialog>
           <DialogTrigger asChild>
-            <Button className="w-full" size={"lg"} variant={"secondary"}>
+            <Button className="w-full" size={"lg"} variant={"outline"}>
               <Plus size={20} />
             </Button>
           </DialogTrigger>
@@ -103,6 +146,7 @@ export const OrganizationForm = memo(({ organization }: { organization?: Organiz
             return data;
           })
         }
+        return [...prev, variable]
       })
     },
     onError: (err) => {
@@ -110,7 +154,11 @@ export const OrganizationForm = memo(({ organization }: { organization?: Organiz
     }
   })
   const handleSubmit = useCallback(async (data: SaveOrgDTO) => {
-    await mutateAsync(data);
+    const payload: SaveOrgDTO = {
+      name: data.name,
+      users: usersOrg.map((userOrg) => ({ id: userOrg.id!, role: userOrg.role! }))
+    }
+    await mutateAsync(payload);
   }, [])
   return (
     <FormProvider {...methods}>

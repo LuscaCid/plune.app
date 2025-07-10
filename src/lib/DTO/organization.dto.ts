@@ -2,13 +2,13 @@ import { z } from "zod";
 
 export class OrganizationDto {
   static userOrg = z.object({
-    id: z.string().min(1),
+    id: z.number().min(1),
     role: z.enum(["Admin", "Viewer", "Editor", "Approver"])
   });
   static usersOrgSchema = z.array(OrganizationDto.userOrg).optional();
 
   static SaveOrgDto = z.object({
-    id: z.string().optional(),
+    id: z.number().optional(),
     name: z.string().min(5).optional(),
     createdAt: z.string().optional(),
     users: OrganizationDto.usersOrgSchema,
