@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/command"
 
 export interface Option {
-  value: string | 
-  label: string
+  value: string;
+  label: string;
   disable?: boolean
   /** fixed option that can't be removed. */
   fixed?: boolean
@@ -341,7 +341,7 @@ const MultipleSelector = ({
   const CreatableItem = () => {
     if (!creatable) return undefined
     if (
-      isOptionsExist(options, [{ value: inputValue, label: inputValue }]) ||
+      isOptionsExist(options, [{ value: inputValue, label: inputValue, }]) ||
       selected.find((s) => s.value === inputValue)
     ) {
       return undefined
