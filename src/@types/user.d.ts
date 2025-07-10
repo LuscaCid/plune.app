@@ -1,6 +1,6 @@
 export type Roles = 'Admin' | 'Editor' | 'Approver' | 'Viewer';
 export interface OrganizationRole {
-  organizationId: string
+  organizationId: number
   organizationName: string
   organizationLogo: string
   role: Roles
@@ -9,7 +9,7 @@ export interface OrganizationRole {
 export interface User {
   name: string
   email: string
-  id?: string
+  id?: number
   status?: 'Active' | 'Inative'
   lastAccess?: string
   avatar?: string
