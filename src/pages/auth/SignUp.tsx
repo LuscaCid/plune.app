@@ -96,7 +96,7 @@ export const SignUp = memo(() => {
                 <FormLabel>
                   Password
                 </FormLabel>
-                <FormInput<keyof UserSignUpDTO> name="password"/>
+                <FormInput<keyof UserSignUpDTO> name="password" type="password"/>
                 <FormDescription>
                   Dont tell your password to anyone
                 </FormDescription>
@@ -105,7 +105,7 @@ export const SignUp = memo(() => {
                 <FormLabel>
                   Repeat password
                 </FormLabel>
-                <FormInput {...methods.register("password")} />
+                <FormInput {...methods.register("password")} type="password" />
                 <FormDescription>
                   repeat your password exactly as above 
                 </FormDescription>

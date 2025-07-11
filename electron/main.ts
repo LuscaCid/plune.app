@@ -55,7 +55,7 @@ function createWindow() {
   ipcMain.on('close', () => {
     win?.close()
   })
-  win.setMinimumSize(1000, 600);
+  win.setMinimumSize(1000, 650);
   win.setSize(1200, 700);
   win.webContents.on('did-finish-load', () => {
     win?.show();
