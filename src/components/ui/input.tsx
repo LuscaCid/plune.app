@@ -1,11 +1,8 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
-import { useFormContext } from "react-hook-form"
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
-  const { formState : { errors }} = useFormContext();
-  console.log(errors)
   return (
     <input
       type={type}
