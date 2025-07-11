@@ -14,7 +14,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -54,6 +54,7 @@ interface Props<T extends RowData> {
   selectable?: boolean;
   pageIndex: number;
   setPageIndex?: (newPageIndex: number) => void;
+  newItem?: { action?: () => void; dialog?: React.ReactNode;  buttonTitle?: string; }
 }
 
 export function GenericTable<T extends RowData>({
@@ -62,7 +63,10 @@ export function GenericTable<T extends RowData>({
   manualPagination,
   pageCount,
   searchFilterColumnInput,
-  selectable = true
+  selectable = true,
+  pageIndex,
+  newItem,
+  setPageIndex
 }: Props<T>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -120,16 +124,24 @@ export function GenericTable<T extends RowData>({
   return (
     <div className="w-full">
       <div className="flex items-center justify-between pb-4">
-        {searchFilterColumnInput && (
-          <Input
-            placeholder={searchFilterColumnInput.placelholder}
-            value={(table.getColumn(searchFilterColumnInput.accssorKey)?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn(searchFilterColumnInput.accssorKey)?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        )}
+        <aside className="flex items-center gap-2">
+          {searchFilterColumnInput && (
+            <Input
+              placeholder={searchFilterColumnInput.placelholder}
+              value={(table.getColumn(searchFilterColumnInput.accssorKey)?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                table.getColumn(searchFilterColumnInput.accssorKey)?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          )}
+          {newItem && newItem.dialog && (newItem.dialog)}
+          {newItem && newItem.action && !newItem.dialog && (
+            <Button variant={"outline"} size={"icon"}>
+              {newItem.buttonTitle ? newItem.buttonTitle : (<><Plus size={15}/> New</>)}
+            </Button>
+          )}
+        </aside>
 
         <DropdownMenu>
           <DropdownMenuTrigger className="self-end">
@@ -217,7 +229,12 @@ export function GenericTable<T extends RowData>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
+            onClick={() => {
+              table.previousPage();
+              if (pageIndex && setPageIndex) {
+                setPageIndex(pageIndex - 1)
+              }
+            }}
             disabled={!table.getCanPreviousPage()}
           >
             Previous
@@ -225,7 +242,12 @@ export function GenericTable<T extends RowData>({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
+            onClick={() => {
+              table.nextPage()
+              if (pageIndex && setPageIndex) {
+                setPageIndex(pageIndex + 1)
+              }
+            }}
             disabled={!table.getCanNextPage()}
           >
             Next
