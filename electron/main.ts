@@ -24,30 +24,29 @@ function createWindow() {
   serverProcess.get("*", (_, res) => {
     res.sendFile(path.join(staticPath, 'index.html'));
   })
- 
+
   win = new BrowserWindow({
     frame: false,
-    transparent : false,
-    show :false,
+    transparent: false,
+    show: false,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
-      
-      nodeIntegration : true,
-      contextIsolation : true,
+
+      nodeIntegration: true,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
   win.webContents.on('before-input-event', (event, input) => {
-  if (input.key === 'F12' || (input.control && input.key === 'I')) {
-    event.preventDefault(); // Impede que o DevTools seja aberto
-  }
-});
+    if (input.key === 'F12' || (input.control && input.key === 'I')) {
+      event.preventDefault(); // Impede que o DevTools seja aberto
+    }
+  });
   ipcMain.on('minimize', () => {
     win?.minimize()
   })
   ipcMain.on('resize', () => {
-    if (win?.isMaximized()) 
-    {
+    if (win?.isMaximized()) {
       win.unmaximize();
       return;
     }
@@ -80,11 +79,29 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-  autoUpdater.checkForUpdatesAndNotify();
     createWindow()
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  setupAutoUpdater()
+  createWindow()
+})
 // app.on('quit', () => backendProcess?.kill())
 
+function setupAutoUpdater() {
+  autoUpdater.checkForUpdatesAndNotify();
+
+  autoUpdater.on("update-available", () => {
+    console.log("🔄 Atualização disponível.");
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    console.log("✅ Atualização baixada.");
+    autoUpdater.quitAndInstall();
+  });
+
+  autoUpdater.on("error", (err) => {
+    console.error("❌ Erro no auto-updater:", err);
+  });
+}

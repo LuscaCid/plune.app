@@ -13,7 +13,7 @@ export function Dashboard() {
   return (
     <ScreenWrapper>
       <div>
-        dashboard
+        dashboard page 
       </div>
     </ScreenWrapper>
   )
