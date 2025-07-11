@@ -14,7 +14,7 @@ export function AppLayout() {
           <AppHeader />
           <main
             style={{ height: "calc(100% - 3.5rem)" }}
-            className="p-3 py-0 flex-1 dark:bg-zinc-950 overflow-auto relative">
+            className="p-3 flex-1 dark:bg-zinc-950 overflow-auto relative">
             <Outlet />
           </main>
         </main>

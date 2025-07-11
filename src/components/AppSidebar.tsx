@@ -8,25 +8,18 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar"
-import { ChartBar, Workflow } from "lucide-react";
-import { TypographyH4 } from "./ui/Typography";
+import { Workflow } from "lucide-react";
 import { footerItems, headerItems } from "@/lib/routes";
 import { NavMain } from "./ui/NavMain";
 import { Link } from "react-router-dom";
 import { NativeUserDropdown } from "./UserDropdown";
+import { OrganizationSwitcher } from "./OrganizationSwitcher";
 export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" variant="inset"  >
       <SidebarHeader className=" title-bar-drag-region">
-        <Link to={"/"}>
-          <SidebarMenuItem className="flex no-drag ">
-            <SidebarMenuButton>
-              <ChartBar size={15} />
-              <TypographyH4 content="Plune.app" className="select-none" />
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </Link>
+        <OrganizationSwitcher />
       </SidebarHeader>
       <SidebarContent className="p-2 flex flex-col justify-between dark:bg-zinc-900" >
         <SidebarGroupContent>

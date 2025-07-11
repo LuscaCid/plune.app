@@ -6,11 +6,10 @@
     "email": "lucasfelipaaa@gmail.com",
     "name": "Lucas Felipe Lima Cid"
   },
-  "version": "0.0.13",
+  "version": "0.1.3",
   "type": "module",
   "homepage": "https://github.com/LuscaCid/plune.app",
   "build": {
-
     "appId": "com.plune.plune.app",
     "productName": "plune-app",
     "publish": [

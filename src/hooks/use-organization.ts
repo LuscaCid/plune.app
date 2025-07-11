@@ -1,3 +1,4 @@
+import { Organization } from "@/@types/Organization";
 import { Roles } from "@/@types/user";
 import { SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { api } from "@/service/api";
@@ -5,17 +6,12 @@ import { useCallback } from "react";
 interface UserOrganizationsReturn {
   id: number;
   role: Roles;
-  organization: {
-    id: number;
-    name: string;
-    createdAt: Date;
-    logo: string;
-  }
+  organization: Organization
 }
 export function userOrganizations() {
   const getUserOrganizations = useCallback(async () => {
     const response = await api.get("/organizations");
-    return response.data as { data: UserOrganizationsReturn[]; };
+    return response.data.data as UserOrganizationsReturn[];
   }, []);
 
   const saveOrganization = useCallback(async (data: SaveOrgDTO) => {
