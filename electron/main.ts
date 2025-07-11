@@ -24,27 +24,9 @@ function createWindow() {
   serverProcess.get("*", (_, res) => {
     res.sendFile(path.join(staticPath, 'index.html'));
   })
-
-  //criacao da instancia da aplicação backend de forma local
-  // try {
-  //   const pathName = path.join(__dirname, '..', 'dist-api', 'src', 'main')
-  //   backendProcess = spawn('node', [pathName], );
-    
-  //   backendProcess.stdout.on("data", (data) => {
-  //     console.log(`Backend: ${data}`);
-  //   });   
-
-  //   backendProcess.stderr.on("data", (data) => {
-  //     console.error(`Erro no backend: ${data}`);
-  //   });
-  
-  // } catch (err) 
-  // {
-  //   console.log(err);
-  // }
  
   win = new BrowserWindow({
-    frame: true,
+    frame: false,
     transparent : false,
     show :false,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),

@@ -10,6 +10,7 @@
   "type": "module",
   "homepage": "https://github.com/LuscaCid/plune.app",
   "build": {
+    
     "appId": "com.plune.plune.app",
     "productName": "plune-app",
     "publish": [

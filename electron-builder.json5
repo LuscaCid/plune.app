@@ -39,5 +39,14 @@
       "AppImage"
     ],
     "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "LuscaCid",
+      "repo": "plune.app",
+      "releaseType": "release",
+      "vPrefixedTagName": true
+    }
+  ]
 }
