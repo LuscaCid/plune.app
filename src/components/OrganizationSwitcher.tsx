@@ -68,7 +68,12 @@ export function OrganizationSwitcher() {
             {organizations && organizations.length > 0 && organizations.map((org, index) => (
               <DropdownMenuItem
                 key={org.organization.name}
-                onClick={() => setSelectedOrganization({ role: org.role, createdAt: org.organization.createdAt, name : org.organization.name })}
+                onClick={() => setSelectedOrganization({ 
+                  role: org.role, 
+                  id: org.organization.id, 
+                  createdAt: org.organization.createdAt, 
+                  name : org.organization.name 
+                })}
                 className="gap-2 p-2"
               >
                 <Avatar>
