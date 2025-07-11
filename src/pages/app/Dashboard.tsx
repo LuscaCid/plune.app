@@ -13,7 +13,7 @@ export function Dashboard() {
   return (
     <ScreenWrapper>
       <div>
-        dashboard page 
+        dashboard page updated realeased 0.0.13
       </div>
     </ScreenWrapper>
   )

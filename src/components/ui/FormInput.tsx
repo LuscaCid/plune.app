@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils"
 import { useFormContext } from "react-hook-form"
 import { Button } from "./button";
 import { Eye, EyeClosed } from "lucide-react";
-import { Tooltip } from "./tooltip";
-import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 interface FormInputProps<T extends string> extends React.ComponentProps<"input"> {
   name?: T
   type?: "text" | "email" | "password" | "number";
