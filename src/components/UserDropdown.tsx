@@ -24,6 +24,7 @@ export function NativeUserDropdown() {
         <DropdownMenuSeparator />
         <CustomDropdownMenuItem icon={SunMoon} onClick={() => setTheme(theme == "dark" ? "light" : "dark")} title="Theme" />
         <CustomDropdownMenuItem icon={UserIcon} onClick={() => console.log("Perfil")} title={user ? user.email! : ""} />
+        <DropdownMenuSeparator />
         <CustomDropdownMenuItem icon={LogOut} onClick={logout} title="Logout" />
       </CustomDropwdownMenuContent>
     </DropdownMenu>
