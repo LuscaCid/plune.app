@@ -41,8 +41,8 @@ export function AppSidebar() {
                 icon: Workflow,
                 items: [
                   {
-                    title: "Models",
-                    url: "/flows/models"
+                    title: "Templates",
+                    url: "/flows/templates"
                   },
                   {
                     title: "Instances",

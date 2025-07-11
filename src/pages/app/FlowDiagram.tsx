@@ -37,11 +37,10 @@ export function FlowDiagram() {
   const queryClient = useQueryClient();
   const params = useParams();
   const queryKeyBytype = useMemo(() => {
-    if (params.type && (params.type == "models" || params.type == "instances")) {
-      //instances -- models
+    if (params.type && (params.type == "templates" || params.type == "instances")) {
       const flowsDictionary = {
         instances: ["get-org-instance-flows"],
-        models: ["get-org-models-flows"],
+        templates: ["get-org-template-flows"],
       }
       return flowsDictionary[params.type];
     }
@@ -82,8 +81,6 @@ export function FlowDiagram() {
         }]
       )
     }
-    // queryClient.setQueryData()
-    //salvar isso em cache
   }, [setEdges, edges]);
 
   const onNodeDrop = useCallback(async (event: React.DragEvent<HTMLDivElement>) => {

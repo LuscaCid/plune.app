@@ -20,14 +20,16 @@ export const FormNodeType = React.memo((nodeProps: NodeProps<FlowNodeData>) => {
   const path = useLocation();
   const { canEdit } = useRoles();
   const selectedOrganization = useUserStore(state => state.selectedOrganization);
-  const isModelsPage = path.pathname.includes("models");
+  
+  const isTemplatesPage = path.pathname.includes("templates");
+
   const handleSubmit = useCallback((data: unknown) => {
     console.log(data);
   }, [])
   return (
     <FlowCard
       dropdownContent={
-        isModelsPage && canEdit(selectedOrganization!) && (
+        isTemplatesPage && canEdit(selectedOrganization!) && (
           <DropdownMenuContent>
             <DropdownMenuLabel>Edition</DropdownMenuLabel>
             <DropdownMenuSeparator />

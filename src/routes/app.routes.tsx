@@ -1,7 +1,7 @@
 import { AppLayout } from "@/layout/app";
 import { Approvals } from "@/pages/app/Approvals";
 import { Dashboard } from "@/pages/app/Dashboard";
-import { FlowModels } from "@/pages/app/FlowModels";
+import { FlowTemplates } from "@/pages/app/FlowTemplates";
 import { FlowDiagram } from "@/pages/app/FlowDiagram";
 import { Forms } from "@/pages/app/Forms";
 import { Route, Routes } from "react-router-dom";
@@ -18,7 +18,7 @@ export function AppRoutes() {
         <Route path="/" element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/organizations" element={<OrganizationDispatch />} />
-          <Route path="/flows/models/" element={<FlowModels />} />
+          <Route path="/flows/templates/" element={<FlowTemplates />} />
           <Route path="/flows/instances" element={<FlowInstances />} />
           <Route path="/flows/diagram/:type/:id" element={<FlowDiagram />} />
           <Route path="/forms" element={<Forms />} />
