@@ -14,6 +14,7 @@ import { useMemo, useState } from "react";
 export function Forms() {
   const [isOpen, setIsOpen] = useState(false);
   const [detailedForm, setdetailedForm] = useState<Form>();
+  const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery({
     queryFn: async () => {
       const response = await api.get("/forms");
@@ -96,6 +97,8 @@ export function Forms() {
       </Dialog>
       {!isLoading && data && (
         <GenericTable<Form>
+          setPageIndex={(newPage) => setPage(newPage)}
+          pageIndex={page}
           selectable={false}
           searchFilterColumnInput={{ accssorKey: "name", placelholder: "Flow name..." }}
           data={data}

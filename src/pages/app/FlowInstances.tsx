@@ -6,8 +6,10 @@ import { useSeo } from "@/hooks/use-seo";
 import { useQuery } from "@tanstack/react-query";
 import { useFlowColumns } from "@/hooks/use-flow-columns";
 import { useSharedQueryKeys } from "@/hooks/use-shared-querykeys";
+import { useState } from "react";
 
 export function FlowInstances() {
+  const [page, setPage] = useState(1);
   useSeo({
     title: "Flows - instances",
     description: "Visualizar flows executados pelos colaboradores",
@@ -18,7 +20,7 @@ export function FlowInstances() {
   const { getOrganizationInstancesFlows } = useFlow();
 
   const { data, isLoading } = useQuery({
-    queryFn: async () => getOrganizationInstancesFlows(),
+    queryFn: async () => getOrganizationInstancesFlows({ page }),
     queryKey: flowInstanceQueryKey,
     refetchOnWindowFocus: false,
   });
@@ -28,7 +30,11 @@ export function FlowInstances() {
       {!isLoading && data && (
         <GenericTable<Flow>
           searchFilterColumnInput={{ accssorKey : "name", placelholder : "Flow name..."}}
-          data={data}
+          data={data.data}
+          setPageIndex={(newPage) => setPage(newPage)}
+          pageIndex={page}
+          pageCount={data.count}
+          // newItem={}
           manualPagination={true}
           columns={instanceColumns}
         />
