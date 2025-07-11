@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { ChevronsUpDown, Plus } from "lucide-react"
 
 import {
@@ -16,22 +15,22 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
+import { useUserStore } from "@/store/user"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { useQuery } from "@tanstack/react-query"
+import { userOrganizations } from "@/hooks/use-organization"
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+export function OrganizationSwitcher() {
+  const { user, selectedOrganization, setSelectedOrganization } = useUserStore();
+  const { getUserOrganizations } = userOrganizations();
 
-  if (!activeTeam) {
+  const { data: organizations } = useQuery({
+    queryKey: ["user-organizations", user?.email],
+    queryFn: getUserOrganizations,
+  });
+
+  if (!selectedOrganization) {
     return null
   }
 
@@ -39,17 +38,20 @@ export function TeamSwitcher({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger className="w-full">
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground no-drag"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeTeam.logo className="size-4" />
+              <div className="  flex  items-center justify-center rounded-lg">
+                <Avatar>
+                  <AvatarImage className="rounded-full bg-transparent h-10 w-10" src={selectedOrganization ? selectedOrganization?.logo : ""} />
+                  <AvatarFallback>{selectedOrganization ? selectedOrganization.name!.charAt(0) : ""} </AvatarFallback>
+                </Avatar>
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-medium">{selectedOrganization.name}</span>
+                <span className="truncate text-xs">{selectedOrganization.role}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -57,22 +59,23 @@ export function TeamSwitcher({
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             align="start"
-            side={isMobile ? "bottom" : "right"}
+            side={"right"}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              Organizations
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {organizations && organizations.length > 0 && organizations.map((org, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={org.organization.name}
+                onClick={() => setSelectedOrganization({ role: org.role, createdAt: org.organization.createdAt, name : org.organization.name })}
                 className="gap-2 p-2"
               >
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <team.logo className="size-3.5 shrink-0" />
-                </div>
-                {team.name}
+                <Avatar>
+                  <AvatarImage className="rounded-full h-10 w-10" src={org ? org?.organization.logo : ""} />
+                  <AvatarFallback>{org ? org.organization.name!.charAt(0) : ""} </AvatarFallback>
+                </Avatar>
+                {org.organization.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
@@ -81,7 +84,7 @@ export function TeamSwitcher({
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">Add team</div>
+              <div className="text-muted-foreground font-medium">Add org</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

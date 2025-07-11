@@ -15,12 +15,13 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 let win: BrowserWindow | null
 // let backendProcess : ChildProcessWithoutNullStreams |null = null; 
 function createWindow() {
+  const port = Math.round(Math.random() * 60_000)
   const serverProcess = express();
   const staticPath = path.join(__dirname, '..', 'dist');
   serverProcess.use(express.static(staticPath));
 
   //em proceso de build, o redirecionamento dos arquivos estaticos (index.html) esta para dist/index.html
-  serverProcess.listen(3002, () => console.log('Serving the dist application in: http://localhost:3002'));
+  serverProcess.listen(port, () => console.log('Serving the dist application in: http://localhost:' + port));
   serverProcess.get("*", (_, res) => {
     res.sendFile(path.join(staticPath, 'index.html'));
   })
@@ -66,8 +67,7 @@ function createWindow() {
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {
-    // win.loadFile('dist/index.html')
-    win.loadURL("http://localhost:3002")
+    win.loadURL("http://localhost:" + port)
   }
 }
 app.on('window-all-closed', () => {

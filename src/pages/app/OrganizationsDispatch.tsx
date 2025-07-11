@@ -13,8 +13,8 @@ import { OrganizationDto, SaveOrgDTO } from "@/lib/DTO/organization.dto";
 import { useUserStore } from "@/store/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, EllipsisVertical, Plus, Trash } from "lucide-react";
-import { memo, useCallback, useState } from "react";
+import { ArrowLeft, ArrowRight, EllipsisVertical, Pencil, Plus, Trash } from "lucide-react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useUser } from "@/hooks/use-user";
@@ -22,21 +22,35 @@ import { useUser } from "@/hooks/use-user";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
 import { CustomDropdownMenuItem } from "@/components/UserDropdown";
+import { useLocation } from "react-router-dom";
 
 export const OrganizationDispatch = memo(() => {
-  const { getUserOrganizations } = userOrganizations();
+  const path = useLocation();
+  const [organizationEdition, setOrganizationEdition] = useState<Organization | undefined>();
+  const [open, setOpen] = useState<boolean>(false);
   const { logout } = useUser()
+
+  const { getUserOrganizations } = userOrganizations();
   const user = useUserStore(state => state.user);
   const setSelectedOrganization = useUserStore(state => state.setSelectedOrganization);
-  const { data: response } = useQuery({
+  const selectedOrganization = useUserStore(state => state.selectedOrganization);
+
+  const { data } = useQuery({
     queryFn: getUserOrganizations,
     queryKey: ["user-organizations", user?.email]
   });
+  useEffect(() => {
+    if (!open) {
+      setOrganizationEdition(undefined);
+    }
+  }, [open])
   return (
     <main className="flex flex-col gap-3">
-      <TypographyH2 content={`${response && response?.data.length >= 0 ? "Your organizations" : "Create an new organization"}`} />
+      {!path.pathname.includes("/organizations") && (
+        <TypographyH2 content={`${data && data?.length >= 0 ? "Your organizations" : "Create an new organization"}`} />
+      )}
       <div className=" grid grid-cols-1 md:grid-cols-3 gap-4 items-center justify-center ">
-        {response && response.data.map((item, idx) => (
+        {data && data.map((item, idx) => (
           <Card key={idx}>
             <CardHeader className="flex justify-between ">
               <main className="space-y-2">
@@ -62,7 +76,18 @@ export const OrganizationDispatch = memo(() => {
                       Actions
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <CustomDropdownMenuItem icon={ArrowLeft} title="Exit" onClick={() => { }} />
+                    <CustomDropdownMenuItem
+                      icon={ArrowLeft}
+                      title="Exit" onClick={() => { }}
+                    />
+                    <CustomDropdownMenuItem
+                      icon={Pencil}
+                      onClick={() => {
+                        setOrganizationEdition(item.organization)
+                        setOpen(!open);
+                      }} title="Edit"
+                    />
+                    <DropdownMenuSeparator />
                     <CustomDropdownMenuItem icon={Trash} onClick={() => { }} title="Delete" variant="destructive" />
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -73,34 +98,45 @@ export const OrganizationDispatch = memo(() => {
                 className={"w-full group"}
                 variant={'outline'}
                 onClick={() => setSelectedOrganization({
-                  organizationId : item.organization.id,
-                  organizationName : item.organization.name,
-                  organizationLogo : item.organization.logo ?? "",
-                  role : item.role
+                  id: item.organization.id!,
+                  name: item.organization.name,
+                  logo: item.organization.logo ?? "",
+                  role: item.role,
                 })}
               >
-                Join <ArrowRight className="group-hover:translate-x-2 transition duration-200" size={20} />
+                {selectedOrganization?.id == item.organization.id ? "Already in use" : "Join"}
+                <ArrowRight className="group-hover:translate-x-2 transition duration-200" size={20} />
               </Button>
             </CardContent>
           </Card>
         ))}
-        <NewOrganizationCard />
+        <NewOrganizationCard
+          open={open}
+          setOpen={setOpen}
+          organization={organizationEdition}
+        />
       </div>
-      <Button onClick={logout} className="absolute bottom-10 left-10 flex items-center">
-        <ArrowLeft size={15} /> Logout
-      </Button>
+      {!path.pathname.includes("/organizations") && (
+        <Button onClick={logout} className="absolute bottom-10 left-10 flex items-center">
+          <ArrowLeft size={15} /> Logout
+        </Button>
+      )}
     </main>
   )
 })
-
-const NewOrganizationCard = memo(() => {
+interface NewOrgCardProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  organization?: Organization;
+}
+const NewOrganizationCard = memo(({ open, organization, setOpen }: NewOrgCardProps) => {
   return (
     <Card className="h-full ">
       <CardContent className="h-full flex flex-col gap-5 items-start justify-between">
         <CardTitle className="text-muted-foreground">
           New Organization
         </CardTitle>
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="w-full" size={"lg"} variant={"outline"}>
               <Plus size={20} />
@@ -113,7 +149,7 @@ const NewOrganizationCard = memo(() => {
             <DialogDescription>
               Add new users into the organization
             </DialogDescription>
-            <OrganizationForm />
+            <OrganizationForm organization={organization} />
           </DialogContent>
         </Dialog>
       </CardContent>
@@ -137,24 +173,29 @@ export const OrganizationForm = memo(({ organization }: { organization?: Organiz
     mutationKey: ["save-org"],
     onSuccess: (_, variable) => {
       toast("Organization saved");
-      queryClient.setQueryData(["user-organizations", user?.email], (prev: Organization[]) => {
-        if (variable.id) {
-          return prev.map((data) => {
-            if (data.id === variable.id) {
-              return variable
-            }
-            return data;
-          })
+      queryClient.setQueryData(
+        ["user-organizations", user?.email],
+        (prev: Organization[]) => {
+          if (variable.id) {
+            return prev.map((data) => {
+              if (data.id === variable.id) {
+                return variable
+              }
+              return data;
+            })
+          }
+          return [...prev, variable]
         }
-        return [...prev, variable]
-      })
+      )
     },
     onError: (err) => {
+      // toast(err)
       console.log(err)
     }
   })
   const handleSubmit = useCallback(async (data: SaveOrgDTO) => {
     const payload: SaveOrgDTO = {
+      id: organization ? organization.id : undefined,
       name: data.name,
       users: usersOrg.map((userOrg) => ({ id: userOrg.id!, role: userOrg.role! }))
     }
