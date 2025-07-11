@@ -107,7 +107,7 @@ export const SignUp = memo(() => {
                 </FormLabel>
                 <FormInput {...methods.register("password")} type="password" />
                 <FormDescription>
-                  repeat your password exactly as above 
+                  repeat your password exactly as above for compare
                 </FormDescription>
               </FormItem>
               <SubmitButton isPending={isPending} />
