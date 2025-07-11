@@ -27,14 +27,11 @@ function createWindow() {
   })
 
   win = new BrowserWindow({
-    frame: false,
+    frame: Boolean(process.env.VITE_PUBLIC),
     transparent: false,
     show: false,
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
     webPreferences: {
-
-      nodeIntegration: true,
-      contextIsolation: true,
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
@@ -72,6 +69,7 @@ function createWindow() {
 }
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    
     app.quit()
     win = null
   }

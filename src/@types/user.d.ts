@@ -1,8 +1,7 @@
+import { Organization } from "./Organization";
+
 export type Roles = 'Admin' | 'Editor' | 'Approver' | 'Viewer';
-export interface OrganizationRole {
-  organizationId: number
-  organizationName: string
-  organizationLogo: string
+export interface OrganizationRole extends Partial<Organization> {
   role: Roles
 }
 
