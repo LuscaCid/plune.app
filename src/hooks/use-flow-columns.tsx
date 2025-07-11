@@ -9,11 +9,11 @@ import { useNavigate } from "react-router-dom"
 
 export function useFlowColumns(url: string) {
   const navigate = useNavigate();
-  const modelColumns = useMemo(() => [
+  const templateColumns = useMemo(() => [
     {
       accessorKey : "id",
+      enableHiding : false,
       header : () => <div>Flow data</div>,
-      id: "id",
       cell: ({ row }) => (
         <Button onClick={() => navigate(url+row.getValue("id"))} size={"sm"} variant={"ghost"}>
           Go to flow<ArrowRight size={15} />
@@ -57,7 +57,6 @@ export function useFlowColumns(url: string) {
       cell: ({ row }) => <div>{row.getValue("description")}</div>
     },
     {
-      
       accessorKey: "isPublished",
       header: "status",
       cell: ({ row }) => <Badge>{row.getValue("isPublished") == true ? "published" : "not published"}</Badge>
@@ -135,6 +134,6 @@ export function useFlowColumns(url: string) {
 
   return {
     instanceColumns,
-    modelColumns
+    templateColumns
   }
 }

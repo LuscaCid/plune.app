@@ -24,7 +24,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { FormInput } from "@/components/ui/FormInput"
+import { Input } from "@/components/ui/Input"
 import {
   Table,
   TableBody,
@@ -51,7 +51,9 @@ interface Props<T extends RowData> {
   pageCount?: number;
   manualPagination?: boolean;
   searchFilterColumnInput?: SearchFilterColumnInputProps;
-  selectable?: boolean
+  selectable?: boolean;
+  pageIndex: number;
+  setPageIndex?: (newPageIndex: number) => void;
 }
 
 export function GenericTable<T extends RowData>({
@@ -68,7 +70,7 @@ export function GenericTable<T extends RowData>({
   const [rowSelection, setRowSelection] = React.useState({})
   const tableColumns: ColumnDef<T>[] = React.useMemo(() => {
     if (selectable) {
-      return [ {
+      return [{
         id: "select",
         header: ({ table }) => (
           <Checkbox
@@ -89,7 +91,7 @@ export function GenericTable<T extends RowData>({
         ),
         enableSorting: false,
         enableHiding: false,
-      }, ...columns, ];
+      }, ...columns,];
     }
     return columns
   }, [columns]);
@@ -117,9 +119,9 @@ export function GenericTable<T extends RowData>({
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between pb-4">
         {searchFilterColumnInput && (
-          <FormInput
+          <Input
             placeholder={searchFilterColumnInput.placelholder}
             value={(table.getColumn(searchFilterColumnInput.accssorKey)?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
@@ -130,7 +132,7 @@ export function GenericTable<T extends RowData>({
         )}
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger className="self-end">
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown />
             </Button>
